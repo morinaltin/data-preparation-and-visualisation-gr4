@@ -1,3 +1,7 @@
 # Large data files
 *.txt
 *.csv
+
+# But allow sample files
+!*sample*.txt
+!*sample*.csv
