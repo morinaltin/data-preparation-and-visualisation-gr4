@@ -1,0 +1,55 @@
+RAPORTI I AGREGIMIT TË TË DHËNAVE
+================================================================================
+
+Dataset origjinal: 891,357 rreshta
+Periudha: 2006-12-16 17:24:00 - 2010-11-26 21:02:00
+
+--------------------------------------------------------------------------------
+AGREGIMET E KRIJUARA
+--------------------------------------------------------------------------------
+
+1. DITOR (aggregation_daily.csv)
+   Rreshta: 1441
+   Periudha: Çdo ditë
+   Statistika: mean, sum, min, max, std
+
+2. SIPAS ORËS (aggregation_hourly.csv)
+   Rreshta: 24
+   Pattern: 24 orë (0-23)
+   Peak hour: 20:00
+   Lowest hour: 4:00
+
+3. JAVOR (aggregation_weekly.csv)
+   Rreshta: 2
+   Kategori: Weekday vs Weekend
+   Weekday mean: 0.876 kW
+   Weekend mean: 0.935 kW
+   Ndryshimi: +6.7%
+
+4. MUJOR (aggregation_monthly.csv)
+   Rreshta: 48
+   Periudha: 2006-12 - 2010-11
+
+5. SEZONAT (aggregation_seasonal.csv)
+   Rreshta: 4
+   Kategori: Winter, Spring, Summer, Autumn
+   Highest: Winter
+   Lowest: Summer
+
+6. PJESA E DITËS (aggregation_timeofday.csv)
+   Rreshta: 4
+   Kategori: Morning, Afternoon, Evening, Night
+
+7. HOUR × WEEKEND (aggregation_hour_weekend.csv)
+   Rreshta: 48
+   Kombinime: 24 orë × 2 day types
+
+--------------------------------------------------------------------------------
+INSIGHTS
+--------------------------------------------------------------------------------
+
+Peak consumption hour: 20:00
+Lowest consumption hour: 4:00
+Weekend vs Weekday: +6.7%
+Highest season: Winter
+Lowest season: Summer

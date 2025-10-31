@@ -1,7 +1,17 @@
-# Large data files
-*.txt
-*.csv
+# Large raw data files (>100 MB)
+data/raw/household_power_consumption.txt
+data/raw/household_power_consumption.csv
 
-# But allow sample files
-!*sample*.txt
-!*sample*.csv
+# Processed data files (too large)
+data/processed/*.csv
+data/aggregated/*.csv
+
+# Allow sample data
+!data/raw/*sample*.txt
+
+# Allow all reports (small files)
+!reports/**/*.txt
+!reports/**/*.csv
+
+# Allow outputs
+!outputs/**/*.csv

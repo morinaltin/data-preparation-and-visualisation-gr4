@@ -1,0 +1,42 @@
+RAPORTI I PASTRIMIT TË TË DHËNAVE
+================================================================================
+
+Dataset fillestare: 999,970 rreshta
+Dataset e pastruar: 891,357 rreshta
+Rreshta të fshira: 108,613 (10.86%)
+
+--------------------------------------------------------------------------------
+MISSING VALUES
+--------------------------------------------------------------------------------
+Para: 87,731
+Pas: 0
+Metoda: Linear interpolation (time-based)
+
+--------------------------------------------------------------------------------
+OUTLIERS
+--------------------------------------------------------------------------------
+               Kolona  Outliers  Lower bound  Upper bound
+  Global_active_power      7031       -3.344        5.182
+Global_reactive_power      1863       -0.390        0.632
+              Voltage       423      227.310      254.540
+     Global_intensity      8025      -13.600       21.400
+       Sub_metering_1     82635        0.000        0.000
+       Sub_metering_2     31028       -3.000        4.000
+       Sub_metering_3         0      -51.000       68.000
+
+Metoda: IQR method (3*IQR)
+Rreshta të hequr: 108,613
+
+--------------------------------------------------------------------------------
+NDRYSHIMET NË STATISTIKA
+--------------------------------------------------------------------------------
+               Kolona Mean para Mean pas Ndryshimi (%)
+  Global_active_power     1.091    0.892       -18.26%
+Global_reactive_power     0.124    0.116        -6.33%
+              Voltage   240.839  241.085        +0.10%
+     Global_intensity     4.625    3.778       -18.31%
+       Sub_metering_1     1.113    0.000      -100.00%
+       Sub_metering_2     1.297    0.365       -71.87%
+       Sub_metering_3     6.452    5.869        -9.03%
+
+Shënim: Ndryshime minimale = pastrimi i mirë
