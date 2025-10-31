@@ -53,6 +53,23 @@ print(f"✓ Is_High_Power: {df['Is_High_Power'].sum():,} ({df['Is_High_Power'].m
 df['Voltage_Normal_Binary'] = ((df['Voltage'] >= 235) & (df['Voltage'] <= 245)).astype(int)
 print(f"✓ Voltage_Normal_Binary: {df['Voltage_Normal_Binary'].sum():,} ({df['Voltage_Normal_Binary'].mean()*100:.1f}%)")
 
+# ENCODING KATEGORIK
+print("\n" + "-"*80)
+print("ENCODING KATEGORIK")
+print("-"*80)
+
+# Label encoding për Season
+season_mapping = {'Winter': 0, 'Spring': 1, 'Summer': 2, 'Autumn': 3}
+df['Season_Encoded'] = df['Season'].map(season_mapping)
+print(f"✓ Season_Encoded (Winter=0, Spring=1, Summer=2, Autumn=3)")
+print(df['Season_Encoded'].value_counts().sort_index())
+
+# Label encoding për TimeOfDay
+time_mapping = {'Night': 0, 'Morning': 1, 'Afternoon': 2, 'Evening': 3}
+df['TimeOfDay_Encoded'] = df['TimeOfDay'].map(time_mapping)
+print(f"\n✓ TimeOfDay_Encoded (Night=0, Morning=1, Afternoon=2, Evening=3)")
+print(df['TimeOfDay_Encoded'].value_counts().sort_index())
+
 # RUAJTJA
 # RUAJTJA
 print("\n" + "-"*80)
@@ -61,7 +78,7 @@ print("-"*80)
 
 df.to_csv('../../data/processed/household_power_consumption_transformed.csv', index=False)
 print(f"✓ Ruajtur: data/processed/household_power_consumption_transformed.csv")
-print(f"  Kolona të reja: 4 (Power_Level, Voltage_Level, Is_High_Power, Voltage_Normal_Binary)")
+print(f"  Kolona të reja: 6 (diskretizim, binarizim, encoding)")
 
 # RAPORT
 with open('../../reports/analysis/transformation_report.txt', 'w', encoding='utf-8') as f:
@@ -83,7 +100,14 @@ with open('../../reports/analysis/transformation_report.txt', 'w', encoding='utf
     f.write(f"    0 (Low): {(~df['Is_High_Power'].astype(bool)).sum():,}\n\n")
     f.write("  - Voltage_Normal_Binary (0/1)\n")
     f.write(f"    1 (Normal): {df['Voltage_Normal_Binary'].sum():,} ({df['Voltage_Normal_Binary'].mean()*100:.1f}%)\n")
-    f.write(f"    0 (Abnormal): {(~df['Voltage_Normal_Binary'].astype(bool)).sum():,}\n")
+    f.write(f"    0 (Abnormal): {(~df['Voltage_Normal_Binary'].astype(bool)).sum():,}\n\n")
+    
+    f.write("ENCODING KATEGORIK:\n")
+    f.write("  - Season_Encoded (0=Winter, 1=Spring, 2=Summer, 3=Autumn)\n")
+    f.write(df['Season_Encoded'].value_counts().sort_index().to_string())
+    f.write("\n\n")
+    f.write("  - TimeOfDay_Encoded (0=Night, 1=Morning, 2=Afternoon, 3=Evening)\n")
+    f.write(df['TimeOfDay_Encoded'].value_counts().sort_index().to_string())
 
 print("✓ Raport: reports/analysis/transformation_report.txt")
 
