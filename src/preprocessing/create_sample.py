@@ -1,23 +1,10 @@
-#!/usr/bin/env python3
-"""
-Create a sample dataset from the large household power consumption files.
-Extracts a representative subset for development/testing without needing the full dataset.
-"""
 import argparse
 import os
 import sys
 
 
 def create_sample(input_file: str, output_file: str, num_lines: int = 10000, skip: int = 1):
-    """
-    Create a sample dataset by taking every Nth line.
-    
-    Args:
-        input_file: Path to the large input file
-        output_file: Path to the output sample file
-        num_lines: Approximate number of lines to include (excluding header)
-        skip: Take every Nth line (1 = consecutive, 10 = every 10th line)
-    """
+
     if not os.path.isfile(input_file):
         print(f"Error: Input file not found: {input_file}", file=sys.stderr)
         sys.exit(1)
@@ -25,7 +12,6 @@ def create_sample(input_file: str, output_file: str, num_lines: int = 10000, ski
     with open(input_file, 'r', encoding='utf-8') as fin, \
          open(output_file, 'w', encoding='utf-8') as fout:
         
-        # Always write the header
         header = fin.readline()
         fout.write(header)
         
@@ -35,7 +21,6 @@ def create_sample(input_file: str, output_file: str, num_lines: int = 10000, ski
         for line in fin:
             line_count += 1
             
-            # Take every Nth line
             if line_count % skip == 0:
                 fout.write(line)
                 lines_written += 1

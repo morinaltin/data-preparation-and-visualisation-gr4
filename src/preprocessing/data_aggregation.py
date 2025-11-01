@@ -1,8 +1,3 @@
-"""
-Agregimi i të Dhënave
-Kërkesat: Agregimi
-"""
-
 import pandas as pd
 import numpy as np
 
@@ -17,7 +12,6 @@ df['Date_Only'] = df['DateTime'].dt.date
 print(f"\nDataset: {df.shape[0]:,} rreshta × {df.shape[1]} kolona")
 print(f"Periudha: {df['DateTime'].min()} deri {df['DateTime'].max()}")
 
-# Agregim ditor
 print("\n" + "-"*80)
 print("AGREGIM DITOR")
 print("-"*80)
@@ -48,7 +42,6 @@ print(daily_agg[['Date', 'Global_active_power_mean', 'Global_active_power_sum',
 daily_agg.to_csv('aggregation_daily.csv', index=False)
 print(f"\n✓ Ruajtur: aggregation_daily.csv")
 
-# Agregim sipas orës
 print("\n" + "-"*80)
 print("AGREGIM SIPAS ORËS (HOURLY PATTERNS)")
 print("-"*80)
@@ -71,7 +64,6 @@ print(f"✓ Agregim sipas orës: {len(hourly_agg)} orë (0-23)")
 print(f"\nPattern konsumi sipas orës:")
 print(hourly_agg[['Hour', 'Global_active_power_mean', 'Global_active_power_max']])
 
-# Gjej peak hours
 peak_hour = hourly_agg.loc[hourly_agg['Global_active_power_mean'].idxmax(), 'Hour']
 low_hour = hourly_agg.loc[hourly_agg['Global_active_power_mean'].idxmin(), 'Hour']
 print(f"\n✓ Peak hour: {int(peak_hour)}:00 ({hourly_agg.loc[hourly_agg['Hour'] == peak_hour, 'Global_active_power_mean'].values[0]:.2f} kW)")
@@ -80,7 +72,6 @@ print(f"✓ Lowest hour: {int(low_hour)}:00 ({hourly_agg.loc[hourly_agg['Hour'] 
 hourly_agg.to_csv('aggregation_hourly.csv', index=False)
 print(f"\n✓ Ruajtur: aggregation_hourly.csv")
 
-# Agregim javor (weekday vs weekend)
 print("\n" + "-"*80)
 print("AGREGIM JAVOR (WEEKDAY vs WEEKEND)")
 print("-"*80)
@@ -115,7 +106,6 @@ print(f"✓ Ndryshimi: {diff_pct:+.1f}%")
 weekly_agg.to_csv('aggregation_weekly.csv', index=False)
 print(f"\n✓ Ruajtur: aggregation_weekly.csv")
 
-# Agregim mujor
 print("\n" + "-"*80)
 print("AGREGIM MUJOR (MONTHLY TRENDS)")
 print("-"*80)
@@ -145,7 +135,6 @@ print(monthly_agg[['Year_Month', 'Global_active_power_mean', 'Global_active_powe
 monthly_agg.to_csv('aggregation_monthly.csv', index=False)
 print(f"\n✓ Ruajtur: aggregation_monthly.csv")
 
-# Agregim sezonat
 print("\n" + "-"*80)
 print("AGREGIM SIPAS SEZONAVE")
 print("-"*80)
@@ -163,7 +152,6 @@ seasonal_agg = df.groupby('Season').agg({
 seasonal_agg.columns = ['_'.join(col).strip('_') for col in seasonal_agg.columns.values]
 seasonal_agg.rename(columns={'Season': 'Season'}, inplace=True)
 
-# Rendit sezonat
 season_order = ['Winter', 'Spring', 'Summer', 'Autumn']
 seasonal_agg['Season'] = pd.Categorical(seasonal_agg['Season'], categories=season_order, ordered=True)
 seasonal_agg = seasonal_agg.sort_values('Season')
@@ -179,7 +167,6 @@ print(f"✓ Sezona me konsim më të ulët: {lowest_season}")
 seasonal_agg.to_csv('aggregation_seasonal.csv', index=False)
 print(f"\n✓ Ruajtur: aggregation_seasonal.csv")
 
-# Agregim sipas TimeOfDay
 print("\n" + "-"*80)
 print("AGREGIM SIPAS PJESËS SË DITËS")
 print("-"*80)
@@ -196,7 +183,6 @@ timeofday_agg = df.groupby('TimeOfDay').agg({
 timeofday_agg.columns = ['_'.join(col).strip('_') for col in timeofday_agg.columns.values]
 timeofday_agg.rename(columns={'TimeOfDay': 'TimeOfDay'}, inplace=True)
 
-# Rendit
 time_order = ['Morning', 'Afternoon', 'Evening', 'Night']
 timeofday_agg['TimeOfDay'] = pd.Categorical(timeofday_agg['TimeOfDay'], categories=time_order, ordered=True)
 timeofday_agg = timeofday_agg.sort_values('TimeOfDay')
@@ -207,7 +193,6 @@ print(timeofday_agg[['TimeOfDay', 'Global_active_power_mean', 'Global_active_pow
 timeofday_agg.to_csv('aggregation_timeofday.csv', index=False)
 print(f"\n✓ Ruajtur: aggregation_timeofday.csv")
 
-# Agregim kombinuar: Hour + IsWeekend
 print("\n" + "-"*80)
 print("AGREGIM KOMBINUAR (HOUR × WEEKEND)")
 print("-"*80)
@@ -227,7 +212,6 @@ print(hour_weekend_agg[(hour_weekend_agg['Hour'] >= 8) & (hour_weekend_agg['Hour
 hour_weekend_agg.to_csv('aggregation_hour_weekend.csv', index=False)
 print(f"\n✓ Ruajtur: aggregation_hour_weekend.csv")
 
-# Raport agregimi
 print("\n" + "-"*80)
 print("KRIJIMI I RAPORTIT")
 print("-"*80)
@@ -289,7 +273,6 @@ with open('aggregation_report.txt', 'w', encoding='utf-8') as f:
 
 print("✓ Raport u ruajt: aggregation_report.txt")
 
-# Përmbledhje
 print("\n" + "="*80)
 print("PËRMBLEDHJE E AGREGIMIT")
 print("="*80)

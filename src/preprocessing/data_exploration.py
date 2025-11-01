@@ -1,8 +1,3 @@
-"""
-Eksplorimi dhe Analiza e të Dhënave
-Kërkesat: Mbledhja e të dhënave, definimi i tipeve të dhënave
-"""
-
 import pandas as pd
 import numpy as np
 
@@ -76,7 +71,6 @@ for col in numeric_cols:
 
 print("\n" + "="*80)
 
-# Ruajtja e rezultateve
 print("\nDUKE RUAJTUR REZULTATET...")
 
 with open('exploration_report.txt', 'w', encoding='utf-8') as f:

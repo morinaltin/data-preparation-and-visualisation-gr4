@@ -1,8 +1,3 @@
-"""
-Analiza e Kualitetit të të Dhënave
-Kërkesat: Kualiteti i të dhënave, identifikimi i vlerave të zbrazëta
-"""
-
 import pandas as pd
 import numpy as np
 
@@ -17,7 +12,6 @@ df = pd.read_csv('household_power_consumption_sample.txt',
 
 print(f"\nDataset: {df.shape[0]:,} rreshta × {df.shape[1]} kolona")
 
-# Vlerat e zbrazëta
 print("\n" + "-"*80)
 print("VLERAT E ZBRAZËTA (MISSING VALUES)")
 print("-"*80)
@@ -42,7 +36,6 @@ if total_missing > 0:
 else:
     print("\n✓ Nuk ka vlera të zbrazëta!")
 
-# Rreshta duplikatë
 print("\n" + "-"*80)
 print("RRESHTA DUPLIKATË")
 print("-"*80)
@@ -58,7 +51,6 @@ if duplicates > 0:
 else:
     print("✓ Nuk ka duplikate!")
 
-# Outliers (IQR method)
 print("\n" + "-"*80)
 print("OUTLIERS (VLERA ANOMALE - IQR METHOD)")
 print("-"*80)
@@ -94,7 +86,6 @@ outliers_df = pd.DataFrame(outliers_summary)
 print("\nPërmbledhje e outliers:")
 print(outliers_df[['Kolona', 'Outliers', 'Përqindja (%)', 'Min', 'Max', 'Lower Bound', 'Upper Bound']].to_string(index=False))
 
-# Vlera negative (për kolonat që nuk duhet të jenë negative)
 print("\n" + "-"*80)
 print("VLERA NEGATIVE (për kolonat që duhet të jenë pozitive)")
 print("-"*80)
@@ -113,7 +104,6 @@ for col in positive_cols:
 if not negative_found:
     print("✓ Nuk ka vlera negative në kolonat që duhet të jenë pozitive!")
 
-# Vlera zero
 print("\n" + "-"*80)
 print("VLERA ZERO")
 print("-"*80)
@@ -123,17 +113,14 @@ for col in numeric_cols:
     zero_pct = (zero_count / len(df)) * 100
     print(f"{col:30s} → {zero_count:>8,} ({zero_pct:>5.2f}%)")
 
-# Konsistenca e të dhënave
 print("\n" + "-"*80)
 print("KONSISTENCA E TË DHËNAVE")
 print("-"*80)
 
-# Kontrollo nëse data është në format të saktë
 try:
     df['DateTime'] = pd.to_datetime(df['Date'] + ' ' + df['Time'], format='%d/%m/%Y %H:%M:%S')
     print("✓ Format i Date/Time është i saktë")
     
-    # Kontrollo për gaps kohore
     df_sorted = df.sort_values('DateTime')
     time_diffs = df_sorted['DateTime'].diff()
     
@@ -146,7 +133,6 @@ try:
 except Exception as e:
     print(f"⚠ Problem me formatin e Date/Time: {e}")
 
-# Përmbledhje e problemeve
 print("\n" + "="*80)
 print("PËRMBLEDHJE E PROBLEMEVE TË KUALITETIT")
 print("="*80)
@@ -170,7 +156,6 @@ else:
 
 print("\n".join(problems))
 
-# Ruajtja e rezultateve
 print("\n" + "-"*80)
 print("DUKE RUAJTUR REZULTATET...")
 print("-"*80)

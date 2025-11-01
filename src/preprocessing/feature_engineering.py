@@ -1,8 +1,3 @@
-"""
-Krijimi i Features të Reja (Feature Engineering)
-Kërkesat: Krijimi i vetive
-"""
-
 import pandas as pd
 import numpy as np
 
@@ -16,7 +11,6 @@ df['DateTime'] = pd.to_datetime(df['DateTime'])
 print(f"\nDataset fillestare: {df.shape[0]:,} rreshta × {df.shape[1]} kolona")
 print(f"Periudha: {df['DateTime'].min()} deri {df['DateTime'].max()}")
 
-# Features kohore
 print("\n" + "-"*80)
 print("FEATURES KOHORE")
 print("-"*80)
@@ -26,7 +20,7 @@ df['Month'] = df['DateTime'].dt.month
 df['Day'] = df['DateTime'].dt.day
 df['Hour'] = df['DateTime'].dt.hour
 df['Minute'] = df['DateTime'].dt.minute
-df['DayOfWeek'] = df['DateTime'].dt.dayofweek  # 0=Monday, 6=Sunday
+df['DayOfWeek'] = df['DateTime'].dt.dayofweek
 df['DayName'] = df['DateTime'].dt.day_name()
 df['MonthName'] = df['DateTime'].dt.month_name()
 df['WeekOfYear'] = df['DateTime'].dt.isocalendar().week
@@ -37,7 +31,6 @@ print("  - Hour, Minute")
 print("  - DayOfWeek (0-6), DayName")
 print("  - MonthName, WeekOfYear")
 
-# Features binary
 print("\n" + "-"*80)
 print("FEATURES BINARY")
 print("-"*80)
@@ -55,7 +48,6 @@ print(f"  - IsMorning: {df['IsMorning'].sum():,} rreshta ({df['IsMorning'].mean(
 print(f"  - IsAfternoon: {df['IsAfternoon'].sum():,} rreshta ({df['IsAfternoon'].mean()*100:.1f}%)")
 print(f"  - IsEvening: {df['IsEvening'].sum():,} rreshta ({df['IsEvening'].mean()*100:.1f}%)")
 
-# Features kategorike
 print("\n" + "-"*80)
 print("FEATURES KATEGORIKE")
 print("-"*80)
@@ -90,12 +82,10 @@ print(df['Season'].value_counts().sort_index())
 print("\n✓ TimeOfDay:")
 print(df['TimeOfDay'].value_counts())
 
-# Features të kalkuluara
 print("\n" + "-"*80)
 print("FEATURES TË KALKULUARA")
 print("-"*80)
 
-# Sub_metering_4: energia jo e termiket (unmeasured)
 df['Sub_metering_4'] = (df['Global_active_power'] * 1000 / 60) - \
                         (df['Sub_metering_1'] + df['Sub_metering_2'] + df['Sub_metering_3'])
 df['Sub_metering_4'] = df['Sub_metering_4'].clip(lower=0)
@@ -105,7 +95,6 @@ print(f"  Mean: {df['Sub_metering_4'].mean():.2f} Wh")
 print(f"  Min: {df['Sub_metering_4'].min():.2f} Wh")
 print(f"  Max: {df['Sub_metering_4'].max():.2f} Wh")
 
-# Total consumption
 df['Total_Sub_metering'] = df['Sub_metering_1'] + df['Sub_metering_2'] + \
                             df['Sub_metering_3'] + df['Sub_metering_4']
 
@@ -114,31 +103,26 @@ print(f"  Mean: {df['Total_Sub_metering'].mean():.2f} Wh")
 print(f"  Min: {df['Total_Sub_metering'].min():.2f} Wh")
 print(f"  Max: {df['Total_Sub_metering'].max():.2f} Wh")
 
-# Power per hour (kW → kWh për 1 minutë)
 df['Energy_per_minute'] = df['Global_active_power'] / 60
 
 print("\n✓ Energy_per_minute (kWh):")
 print(f"  Mean: {df['Energy_per_minute'].mean():.4f} kWh")
 print(f"  Daily estimate: {df['Energy_per_minute'].mean() * 1440:.2f} kWh")
 
-# Intensity ratio
 df['Intensity_ratio'] = df['Global_intensity'] / (df['Voltage'] / 1000)
 df['Intensity_ratio'] = df['Intensity_ratio'].replace([np.inf, -np.inf], 0)
 
 print("\n✓ Intensity_ratio (I/V):")
 print(f"  Mean: {df['Intensity_ratio'].mean():.4f}")
 
-# Features statistike (rolling averages)
 print("\n" + "-"*80)
 print("FEATURES STATISTIKE (ROLLING AVERAGES)")
 print("-"*80)
 
 print("Duke kalkuluar rolling averages (mund të marrë pak kohë)...")
 
-# 1-hour rolling average (60 minutes)
 df['Power_1h_avg'] = df['Global_active_power'].rolling(window=60, min_periods=1).mean()
 
-# 24-hour rolling average (1440 minutes)
 df['Power_24h_avg'] = df['Global_active_power'].rolling(window=1440, min_periods=1).mean()
 
 print("✓ Power_1h_avg (mesatare 1 orë):")
@@ -147,7 +131,6 @@ print(f"  Mean: {df['Power_1h_avg'].mean():.3f} kW")
 print("✓ Power_24h_avg (mesatare 24 orë):")
 print(f"  Mean: {df['Power_24h_avg'].mean():.3f} kW")
 
-# Lag features (previous hour)
 df['Power_prev_1h'] = df['Global_active_power'].shift(60)
 df['Power_change_1h'] = df['Global_active_power'] - df['Power_prev_1h']
 
@@ -155,7 +138,6 @@ print("\n✓ Power_change_1h (ndryshimi nga ora e kaluar):")
 print(f"  Mean: {df['Power_change_1h'].mean():.3f} kW")
 print(f"  Std: {df['Power_change_1h'].std():.3f} kW")
 
-# Përmbledhje features
 print("\n" + "-"*80)
 print("PËRMBLEDHJE E FEATURES")
 print("-"*80)
@@ -172,7 +154,6 @@ print("\nFeatures të reja:")
 for i, feat in enumerate(new_features, 1):
     print(f"  {i:2d}. {feat}")
 
-# Kontrollo për missing values në features të reja
 missing_in_new = df[new_features].isnull().sum()
 if missing_in_new.sum() > 0:
     print("\n⚠ Missing values në features të reja:")
@@ -180,7 +161,6 @@ if missing_in_new.sum() > 0:
         if missing_in_new[col] > 0:
             print(f"  {col}: {missing_in_new[col]:,}")
     
-    # Fill missing në rolling features
     for col in ['Power_prev_1h', 'Power_change_1h']:
         if col in df.columns:
             df[col] = df[col].fillna(0)
@@ -189,7 +169,6 @@ if missing_in_new.sum() > 0:
 else:
     print("\n✓ Nuk ka missing values në features të reja")
 
-# Ruajtja e dataset-it me features
 print("\n" + "-"*80)
 print("RUAJTJA E DATASET-IT")
 print("-"*80)
@@ -201,7 +180,6 @@ print(f"  Rreshta: {df.shape[0]:,}")
 print(f"  Kolona: {df.shape[1]} (fillestare: {len(original_cols)}, të reja: {len(new_features)})")
 print(f"  Madhësia: ~{df.memory_usage(deep=True).sum() / 1024**2:.1f} MB")
 
-# Ruaj një raport features
 with open('features_report.txt', 'w', encoding='utf-8') as f:
     f.write("RAPORTI I KRIJIMIT TË FEATURES\n")
     f.write("="*80 + "\n\n")
@@ -248,7 +226,6 @@ with open('features_report.txt', 'w', encoding='utf-8') as f:
 
 print("✓ Raport u ruajt: features_report.txt")
 
-# Shfaq shembull
 print("\n" + "-"*80)
 print("SHEMBULL I TË DHËNAVE ME FEATURES")
 print("-"*80)
