@@ -1,12 +1,22 @@
 import pandas as pd
 import numpy as np
+import os
 
 print("="*80)
 print("PASTRIMI I TË DHËNAVE")
 print("="*80)
 
-df = pd.read_csv('household_power_consumption_sample.txt', 
-                 sep=';', 
+script_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.join(script_dir, '../..')
+
+processed_dir = os.path.join(project_root, 'data/processed')
+reports_dir = os.path.join(project_root, 'reports')
+os.makedirs(processed_dir, exist_ok=True)
+os.makedirs(reports_dir, exist_ok=True)
+
+data_file_path = os.path.join(project_root, 'data/raw/household_power_consumption_sample.txt')
+df = pd.read_csv(data_file_path,
+                 sep=';',
                  low_memory=False,
                  na_values=['?', ''])
 
@@ -83,12 +93,12 @@ for col in numeric_cols:
         IQR = Q3 - Q1
         lower_bound = Q1 - 3 * IQR
         upper_bound = Q3 + 3 * IQR
-        
+
         outliers_mask = (df[col] < lower_bound) | (df[col] > upper_bound)
         outliers_count = outliers_mask.sum()
-        
+
         rows_to_keep &= ~outliers_mask
-        
+
         outliers_summary.append({
             'Kolona': col,
             'Outliers': outliers_count,
@@ -146,7 +156,7 @@ for col in numeric_cols:
         before_mean = df_before_interpolation[col].mean()
         after_mean = df[col].mean()
         change_pct = ((after_mean - before_mean) / before_mean) * 100 if before_mean != 0 else 0
-        
+
         comparison.append({
             'Kolona': col,
             'Mean para': f"{before_mean:.3f}",
@@ -165,41 +175,43 @@ print("-"*80)
 cols_to_save = ['DateTime', 'Date', 'Time'] + numeric_cols
 df_clean = df[cols_to_save].copy()
 
-df_clean.to_csv('household_power_consumption_cleaned.csv', index=False)
+cleaned_data_path = os.path.join(project_root, 'data/processed/household_power_consumption_cleaned.csv')
+df_clean.to_csv(cleaned_data_path, index=False)
 
-print(f"✓ Dataset i pastuar u ruajt: household_power_consumption_cleaned.csv")
+print(f"✓ Dataset i pastuar u ruajt: {cleaned_data_path}")
 print(f"  Rreshta: {df_clean.shape[0]:,} (të njëjta si më parë)")
 print(f"  Kolona: {df_clean.shape[1]} (+ DateTime)")
 print(f"  Madhësia: {len(df_clean) * len(df_clean.columns) * 8 / 1024**2:.2f} MB")
 
-with open('cleaning_report.txt', 'w', encoding='utf-8') as f:
+report_path = os.path.join(project_root, 'reports/quality/cleaning_report.txt')
+with open(report_path, 'w', encoding='utf-8') as f:
     f.write("RAPORTI I PASTRIMIT TË TË DHËNAVE\n")
     f.write("="*80 + "\n\n")
     f.write(f"Dataset fillestare: {len(df_before_interpolation):,} rreshta\n")
     f.write(f"Dataset e pastruar: {len(df_clean):,} rreshta\n")
     f.write(f"Rreshta të fshira: {len(df_before_interpolation) - len(df_clean):,} ({((len(df_before_interpolation) - len(df_clean))/len(df_before_interpolation))*100:.2f}%)\n\n")
-    
+
     f.write("-"*80 + "\n")
     f.write("MISSING VALUES\n")
     f.write("-"*80 + "\n")
     f.write(f"Para: {total_missing_before:,}\n")
     f.write(f"Pas: {total_missing_after:,}\n")
     f.write("Metoda: Linear interpolation (time-based)\n\n")
-    
+
     f.write("-"*80 + "\n")
     f.write("OUTLIERS\n")
     f.write("-"*80 + "\n")
     f.write(outliers_df[['Kolona', 'Outliers', 'Lower bound', 'Upper bound']].to_string(index=False))
     f.write(f"\n\nMetoda: IQR method (3*IQR)\n")
     f.write(f"Rreshta të hequr: {rows_removed:,}\n\n")
-    
+
     f.write("-"*80 + "\n")
     f.write("NDRYSHIMET NË STATISTIKA\n")
     f.write("-"*80 + "\n")
     f.write(comparison_df.to_string(index=False))
     f.write("\n\nShënim: Ndryshime minimale = pastrimi i mirë\n")
 
-print("✓ Raport i pastrimit u ruajt: cleaning_report.txt")
+print(f"✓ Raport i pastrimit u ruajt: {report_path}")
 
 print("\n" + "="*80)
 print("PËRMBLEDHJE E PASTRIMIT")
