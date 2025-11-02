@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 
 print("="*80)
 print("TRANSFORMIMI I TË DHËNAVE")
