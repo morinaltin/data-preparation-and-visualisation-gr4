@@ -1,11 +1,23 @@
 import pandas as pd
 import numpy as np
+import os
 
 print("="*80)
 print("ZGJEDHJA E FEATURES DHE ANALIZA E KORRELACIONIT")
 print("="*80)
 
-df = pd.read_csv('../../data/processed/household_power_consumption_transformed.csv')
+script_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.join(script_dir, '../..')
+
+processed_dir = os.path.join(project_root, 'data/processed')
+outputs_dir = os.path.join(project_root, 'outputs')
+reports_analysis_dir = os.path.join(project_root, 'reports/analysis')
+os.makedirs(processed_dir, exist_ok=True)
+os.makedirs(outputs_dir, exist_ok=True)
+os.makedirs(reports_analysis_dir, exist_ok=True)
+
+transformed_data_path = os.path.join(processed_dir, 'household_power_consumption_transformed.csv')
+df = pd.read_csv(transformed_data_path)
 df['DateTime'] = pd.to_datetime(df['DateTime'])
 
 print(f"\nDataset: {df.shape[0]:,} rreshta × {df.shape[1]} kolona")
@@ -115,15 +127,18 @@ print("\n" + "-"*80)
 print("RUAJTJA E DATASET-IT FINAL")
 print("-"*80)
 
-df_final.to_csv('../../data/processed/household_power_consumption_final.csv', index=False)
+final_data_path = os.path.join(processed_dir, 'household_power_consumption_final.csv')
+df_final.to_csv(final_data_path, index=False)
 print(f"\n✓ Dataset final u ruajt: data/processed/household_power_consumption_final.csv")
 print(f"  Rreshta: {df_final.shape[0]:,}")
 print(f"  Kolona: {df_final.shape[1]}")
 
-correlation_matrix.to_csv('../../outputs/correlation_matrix.csv')
+correlation_matrix_path = os.path.join(outputs_dir, 'correlation_matrix.csv')
+correlation_matrix.to_csv(correlation_matrix_path)
 print(f"✓ Matrica e korrelacionit: outputs/correlation_matrix.csv")
 
-with open('../../reports/analysis/feature_selection_report.txt', 'w', encoding='utf-8') as f:
+feature_selection_report_path = os.path.join(reports_analysis_dir, 'feature_selection_report.txt')
+with open(feature_selection_report_path, 'w', encoding='utf-8') as f:
     f.write("RAPORTI I ZGJEDHJES SË FEATURES\n")
     f.write("="*80 + "\n\n")
     
@@ -155,7 +170,7 @@ with open('../../reports/analysis/feature_selection_report.txt', 'w', encoding='
     for feat in selected_features:
         f.write(f"  - {feat}\n")
 
-print(f"✓ Raport: reports/analysis/feature_selection_report.txt")
+print(f"✓ Raport: {feature_selection_report_path}")
 
 print("\n" + "="*80)
 print("PËRMBLEDHJE E PARA-PROCESIMIT")

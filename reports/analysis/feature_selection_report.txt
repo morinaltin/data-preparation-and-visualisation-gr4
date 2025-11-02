@@ -1,0 +1,88 @@
+RAPORTI I ZGJEDHJES SË FEATURES
+================================================================================
+
+PËRMBLEDHJE:
+  Features fillestare: 40
+  Features të hequra: 8
+  Features finale: 33
+
+--------------------------------------------------------------------------------
+KORRELACIONE TË FORTA (|r| > 0.7)
+--------------------------------------------------------------------------------
+          Feature_1          Feature_2  Correlation
+Global_active_power  Energy_per_minute     1.000000
+ Total_Sub_metering  Energy_per_minute     1.000000
+Global_active_power Total_Sub_metering     1.000000
+   Global_intensity    Intensity_ratio     0.999817
+   Global_intensity Total_Sub_metering     0.998506
+Global_active_power   Global_intensity     0.998506
+   Global_intensity  Energy_per_minute     0.998506
+ Total_Sub_metering    Intensity_ratio     0.997958
+Global_active_power    Intensity_ratio     0.997957
+  Energy_per_minute    Intensity_ratio     0.997957
+            IsNight  TimeOfDay_Encoded    -0.816737
+     Sub_metering_4    Intensity_ratio     0.791007
+   Global_intensity     Sub_metering_4     0.789942
+     Sub_metering_4  Energy_per_minute     0.782988
+Global_active_power     Sub_metering_4     0.782988
+     Sub_metering_4 Total_Sub_metering     0.782985
+Global_active_power      Is_High_Power     0.765698
+  Energy_per_minute      Is_High_Power     0.765698
+ Total_Sub_metering      Is_High_Power     0.765697
+   Global_intensity      Is_High_Power     0.761676
+    Intensity_ratio      Is_High_Power     0.758943
+     Sub_metering_3 Total_Sub_metering     0.742730
+     Sub_metering_3  Energy_per_minute     0.742728
+Global_active_power     Sub_metering_3     0.742728
+   Global_intensity     Sub_metering_3     0.732007
+     Sub_metering_3    Intensity_ratio     0.729992
+          IsEvening  TimeOfDay_Encoded     0.706022
+
+--------------------------------------------------------------------------------
+FEATURES TË HEQURA
+--------------------------------------------------------------------------------
+  - Global_intensity
+  - Intensity_ratio
+  - IsEvening
+  - Is_High_Power
+  - Sub_metering_3
+  - Sub_metering_4
+  - TimeOfDay_Encoded
+  - Total_Sub_metering
+
+--------------------------------------------------------------------------------
+FEATURES FINALE
+--------------------------------------------------------------------------------
+  - DateTime
+  - Date
+  - Time
+  - Global_active_power
+  - Global_reactive_power
+  - Voltage
+  - Global_intensity
+  - Sub_metering_1
+  - Sub_metering_2
+  - Sub_metering_3
+  - Sub_metering_4
+  - Year
+  - Month
+  - Day
+  - Hour
+  - DayOfWeek
+  - IsWeekend
+  - Season
+  - TimeOfDay
+  - Power_Level
+  - Voltage_Level
+  - Is_High_Power
+  - Voltage_Normal_Binary
+  - Season_Encoded
+  - TimeOfDay_Encoded
+  - IsNight
+  - IsMorning
+  - IsAfternoon
+  - Energy_per_minute
+  - Power_1h_avg
+  - Power_24h_avg
+  - Power_prev_1h
+  - Power_change_1h
