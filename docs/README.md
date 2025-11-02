@@ -1,3 +1,23 @@
+<table>
+  <tr>
+    <td width="150" align="center" valign="center">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/University_of_Prishtina_logo.svg/1200px-University_of_Prishtina_logo.svg.png" width="120" alt="University Logo" />
+    </td>
+    <td valign="top">
+      <p><strong>Universiteti i Prishtinës</strong></p>
+      <p>Fakulteti i Inxhinierisë Elektrike dhe Kompjuterike</p>
+      <p>Inxhinieri Kompjuterike dhe Softuerike - Programi Master</p>
+      <p><strong>Projekti nga lënda:</strong> "Përgatitja dhe vizualizimi i të dhënave"</p>
+      <p><strong>Profesor:</strong> PhD Mërgim Hoti</p>
+      <p><strong>Studentët (Gr. 4):</strong></p>
+      <ul>
+        <li>Altin Morina</li>
+        <li>Endri Binaku</li>
+      </ul>
+    </td>
+  </tr>
+</table>
+
 # Individual Household Electric Power Consumption
 
 Analysis and preprocessing of household electric power consumption dataset.
@@ -86,14 +106,28 @@ py create_sample.py -i household_power_consumption.csv -o sample.csv
 ## File Structure
 
 ```
-.
-├── README.md                                    # This file
-├── .gitignore                                   # Excludes large data files
-├── convert_to_csv.py                            # TXT → CSV converter
-├── create_sample.py                             # Sample dataset generator
-├── household_power_consumption.txt              # Original dataset (not in git)
-├── household_power_consumption.csv              # Converted CSV (not in git)
-└── household_power_consumption_sample.txt       # Sample dataset (git-friendly)
+│
+├── src/preprocessing/          ← All scripts
+│   ├── create_stratified_sample.py
+│   ├── data_exploration.py
+│   ├── data_quality_analysis.py
+│   ├── data_cleaning.py
+│   ├── feature_engineering.py
+│   ├── data_aggregation.py
+│   ├── data_transformation.py
+│   └── feature_selection.py
+│
+├── data/
+│   ├── raw/                    ← Original dataset & sample
+│   ├── processed/              ← Cleaned, featured, transformed, final
+│   └── aggregated/             ← 7 aggregations
+│
+├── reports/
+│   ├── analysis/               ← Exploration, features, aggregation, etc.
+│   └── quality/                ← Quality, cleaning reports
+│
+├── outputs/                    ← Correlation matrix, figures
+└── docs/                       ← README, guides
 ```
 
 ## Notes
