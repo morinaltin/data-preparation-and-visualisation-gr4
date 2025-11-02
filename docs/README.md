@@ -103,6 +103,73 @@ py create_sample.py -n 50000 -s 20
 py create_sample.py -i household_power_consumption.csv -o sample.csv
 ```
 
+## Project Execution
+
+### Complete Execution Guide
+
+For detailed step-by-step instructions on how to execute this entire project from start to finish, please refer to:
+
+**[EXECUTION_GUIDE.md](EXECUTION_GUIDE.md)**
+
+The execution guide provides comprehensive instructions for all 8 processing steps with detailed explanations of inputs,
+outputs, and results.
+
+### Quick Start
+
+To execute the complete data processing pipeline:
+
+1. **Prerequisites:**
+   ```bash
+   pip install pandas numpy
+   ```
+
+2. **Navigate to preprocessing directory:**
+   ```bash
+   cd src/preprocessing
+   ```
+
+3. **Execute all 8 steps in sequence:**
+   ```bash
+   python create_stratified_sample.py      # Step 1: Sampling
+   python data_exploration.py              # Step 2: Exploration
+   python data_quality_analysis.py         # Step 3: Quality Analysis
+   python data_cleaning.py                 # Step 4: Data Cleaning
+   python feature_engineering.py           # Step 5: Feature Engineering
+   python data_aggregation.py              # Step 6: Data Aggregation
+   python data_transformation.py           # Step 7: Data Transformation
+   python feature_selection.py             # Step 8: Feature Selection
+   ```
+
+### Pipeline Overview
+
+The execution pipeline transforms the data through these stages:
+
+```
+Original Dataset (2M rows, 127 MB)
+    ↓ [Sampling]
+Sample Dataset (1M rows, 50 MB)
+    ↓ [Cleaning]
+Cleaned Dataset (891K rows, 10 columns)
+    ↓ [Feature Engineering]
+Featured Dataset (891K rows, 37 columns)
+    ↓ [Transformation & Selection]
+Final Dataset (891K rows, ~35-40 columns)
+```
+
+### Expected Results
+
+After complete execution, you will have:
+
+- **5 main datasets** in `data/processed/`
+- **7 aggregated views** in `data/aggregated/`
+- **8 detailed reports** in `reports/`
+- **Correlation matrix** in `outputs/`
+
+**Total processing time:** ~5-10 minutes
+
+**Important:** Always refer to the [EXECUTION_GUIDE.md](EXECUTION_GUIDE.md) for detailed instructions, troubleshooting,
+and verification steps.
+
 ## File Structure
 
 ```
