@@ -1,0 +1,59 @@
+RAPORTI I KRIJIMIT TË FEATURES
+================================================================================
+
+Dataset: 891,357 rreshta × 34 kolona
+Kolona fillestare: 10
+Features të reja: 24
+
+--------------------------------------------------------------------------------
+FEATURES TË REJA
+--------------------------------------------------------------------------------
+
+1. FEATURES KOHORE:
+   - Year, Month, Day, Hour, Minute
+   - DayOfWeek, DayName, MonthName
+   - WeekOfYear
+
+2. FEATURES BINARY:
+   - IsWeekend (0/1)
+   - IsNight, IsMorning, IsAfternoon, IsEvening (0/1)
+
+3. FEATURES KATEGORIKE:
+   - Season (Winter/Spring/Summer/Autumn)
+   - TimeOfDay (Morning/Afternoon/Evening/Night)
+
+4. FEATURES TË KALKULUARA:
+   - Sub_metering_4 (energia jo e termiket)
+   - Total_Sub_metering
+   - Energy_per_minute
+   - Intensity_ratio
+
+5. FEATURES STATISTIKE:
+   - Power_1h_avg (rolling average 1 orë)
+   - Power_24h_avg (rolling average 24 orë)
+   - Power_prev_1h (lag feature)
+   - Power_change_1h (ndryshimi nga ora e kaluar)
+
+--------------------------------------------------------------------------------
+SHPËRNDARJA E VLERAVE
+--------------------------------------------------------------------------------
+
+IsWeekend:
+IsWeekend
+0    647956
+1    243401
+
+Season:
+Season
+Summer    233950
+Spring    226446
+Autumn    220951
+Winter    210010
+
+TimeOfDay:
+TimeOfDay
+Night        316045
+Morning      225869
+Afternoon    216016
+Evening      133427
+

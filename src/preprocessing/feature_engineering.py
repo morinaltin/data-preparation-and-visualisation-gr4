@@ -1,11 +1,22 @@
 import pandas as pd
 import numpy as np
+import os
 
 print("="*80)
 print("KRIJIMI I FEATURES TË REJA")
 print("="*80)
 
-df = pd.read_csv('household_power_consumption_cleaned.csv')
+script_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.join(script_dir, '../..')
+
+processed_dir = os.path.join(project_root, 'data/processed')
+reports_dir = os.path.join(project_root, 'reports/quality')
+os.makedirs(processed_dir, exist_ok=True)
+os.makedirs(reports_dir, exist_ok=True)
+
+# Read the cleaned data file
+cleaned_data_path = os.path.join(project_root, 'data/processed/household_power_consumption_cleaned.csv')
+df = pd.read_csv(cleaned_data_path)
 df['DateTime'] = pd.to_datetime(df['DateTime'])
 
 print(f"\nDataset fillestare: {df.shape[0]:,} rreshta × {df.shape[1]} kolona")
@@ -173,14 +184,15 @@ print("\n" + "-"*80)
 print("RUAJTJA E DATASET-IT")
 print("-"*80)
 
-df.to_csv('household_power_consumption_with_features.csv', index=False)
+output_path = os.path.join(processed_dir, 'household_power_consumption_with_features.csv')
+df.to_csv(output_path, index=False)
 
-print(f"✓ Dataset u ruajt: household_power_consumption_with_features.csv")
+print(f"✓ Dataset u ruajt: {output_path}")
 print(f"  Rreshta: {df.shape[0]:,}")
 print(f"  Kolona: {df.shape[1]} (fillestare: {len(original_cols)}, të reja: {len(new_features)})")
 print(f"  Madhësia: ~{df.memory_usage(deep=True).sum() / 1024**2:.1f} MB")
 
-with open('features_report.txt', 'w', encoding='utf-8') as f:
+with open(os.path.join(reports_dir, 'features_report.txt'), 'w', encoding='utf-8') as f:
     f.write("RAPORTI I KRIJIMIT TË FEATURES\n")
     f.write("="*80 + "\n\n")
     f.write(f"Dataset: {df.shape[0]:,} rreshta × {df.shape[1]} kolona\n")
@@ -224,7 +236,8 @@ with open('features_report.txt', 'w', encoding='utf-8') as f:
     f.write(f"Season:\n{df['Season'].value_counts().to_string()}\n\n")
     f.write(f"TimeOfDay:\n{df['TimeOfDay'].value_counts().to_string()}\n\n")
 
-print("✓ Raport u ruajt: features_report.txt")
+report_path = os.path.join(reports_dir, 'features_report.txt')
+print(f"✓ Raport u ruajt: {report_path}")
 
 print("\n" + "-"*80)
 print("SHEMBULL I TË DHËNAVE ME FEATURES")
