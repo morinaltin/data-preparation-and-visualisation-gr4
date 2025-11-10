@@ -1,23 +1,29 @@
-"""
-Agregimi i të Dhënave
-Kërkesat: Agregimi
-"""
-
 import pandas as pd
 import numpy as np
+import os
 
 print("="*80)
 print("AGREGIMI I TË DHËNAVE")
 print("="*80)
 
-df = pd.read_csv('household_power_consumption_with_features.csv')
+script_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.join(script_dir, '../..')
+
+processed_dir = os.path.join(project_root, 'data/processed')
+aggregated_dir = os.path.join(project_root, 'data/aggregated')
+reports_analysis_dir = os.path.join(project_root, 'reports/analysis')
+os.makedirs(processed_dir, exist_ok=True)
+os.makedirs(aggregated_dir, exist_ok=True)
+os.makedirs(reports_analysis_dir, exist_ok=True)
+
+features_data_path = os.path.join(processed_dir, 'household_power_consumption_with_features.csv')
+df = pd.read_csv(features_data_path)
 df['DateTime'] = pd.to_datetime(df['DateTime'])
 df['Date_Only'] = df['DateTime'].dt.date
 
 print(f"\nDataset: {df.shape[0]:,} rreshta × {df.shape[1]} kolona")
 print(f"Periudha: {df['DateTime'].min()} deri {df['DateTime'].max()}")
 
-# Agregim ditor
 print("\n" + "-"*80)
 print("AGREGIM DITOR")
 print("-"*80)
@@ -45,10 +51,9 @@ print(f"\nShembull (5 ditë të para):")
 print(daily_agg[['Date', 'Global_active_power_mean', 'Global_active_power_sum', 
                  'Daily_Energy_kWh', 'Voltage_mean']].head())
 
-daily_agg.to_csv('aggregation_daily.csv', index=False)
+daily_agg.to_csv(os.path.join(aggregated_dir, 'aggregation_daily.csv'), index=False)
 print(f"\n✓ Ruajtur: aggregation_daily.csv")
 
-# Agregim sipas orës
 print("\n" + "-"*80)
 print("AGREGIM SIPAS ORËS (HOURLY PATTERNS)")
 print("-"*80)
@@ -71,16 +76,14 @@ print(f"✓ Agregim sipas orës: {len(hourly_agg)} orë (0-23)")
 print(f"\nPattern konsumi sipas orës:")
 print(hourly_agg[['Hour', 'Global_active_power_mean', 'Global_active_power_max']])
 
-# Gjej peak hours
 peak_hour = hourly_agg.loc[hourly_agg['Global_active_power_mean'].idxmax(), 'Hour']
 low_hour = hourly_agg.loc[hourly_agg['Global_active_power_mean'].idxmin(), 'Hour']
 print(f"\n✓ Peak hour: {int(peak_hour)}:00 ({hourly_agg.loc[hourly_agg['Hour'] == peak_hour, 'Global_active_power_mean'].values[0]:.2f} kW)")
 print(f"✓ Lowest hour: {int(low_hour)}:00 ({hourly_agg.loc[hourly_agg['Hour'] == low_hour, 'Global_active_power_mean'].values[0]:.2f} kW)")
 
-hourly_agg.to_csv('aggregation_hourly.csv', index=False)
+hourly_agg.to_csv(os.path.join(aggregated_dir, 'aggregation_hourly.csv'), index=False)
 print(f"\n✓ Ruajtur: aggregation_hourly.csv")
 
-# Agregim javor (weekday vs weekend)
 print("\n" + "-"*80)
 print("AGREGIM JAVOR (WEEKDAY vs WEEKEND)")
 print("-"*80)
@@ -112,10 +115,9 @@ print(f"\n✓ Weekday mesatar: {weekday_mean:.3f} kW")
 print(f"✓ Weekend mesatar: {weekend_mean:.3f} kW")
 print(f"✓ Ndryshimi: {diff_pct:+.1f}%")
 
-weekly_agg.to_csv('aggregation_weekly.csv', index=False)
+weekly_agg.to_csv(os.path.join(aggregated_dir, 'aggregation_weekly.csv'), index=False)
 print(f"\n✓ Ruajtur: aggregation_weekly.csv")
 
-# Agregim mujor
 print("\n" + "-"*80)
 print("AGREGIM MUJOR (MONTHLY TRENDS)")
 print("-"*80)
@@ -142,10 +144,9 @@ print(f"✓ Agregim mujor: {len(monthly_agg)} muaj")
 print(f"\nShembull (6 muaj të parë):")
 print(monthly_agg[['Year_Month', 'Global_active_power_mean', 'Global_active_power_sum']].head(6))
 
-monthly_agg.to_csv('aggregation_monthly.csv', index=False)
+monthly_agg.to_csv(os.path.join(aggregated_dir, 'aggregation_monthly.csv'), index=False)
 print(f"\n✓ Ruajtur: aggregation_monthly.csv")
 
-# Agregim sezonat
 print("\n" + "-"*80)
 print("AGREGIM SIPAS SEZONAVE")
 print("-"*80)
@@ -163,7 +164,6 @@ seasonal_agg = df.groupby('Season').agg({
 seasonal_agg.columns = ['_'.join(col).strip('_') for col in seasonal_agg.columns.values]
 seasonal_agg.rename(columns={'Season': 'Season'}, inplace=True)
 
-# Rendit sezonat
 season_order = ['Winter', 'Spring', 'Summer', 'Autumn']
 seasonal_agg['Season'] = pd.Categorical(seasonal_agg['Season'], categories=season_order, ordered=True)
 seasonal_agg = seasonal_agg.sort_values('Season')
@@ -176,10 +176,9 @@ lowest_season = seasonal_agg.loc[seasonal_agg['Global_active_power_mean'].idxmin
 print(f"\n✓ Sezona me konsim më të lartë: {highest_season}")
 print(f"✓ Sezona me konsim më të ulët: {lowest_season}")
 
-seasonal_agg.to_csv('aggregation_seasonal.csv', index=False)
+seasonal_agg.to_csv(os.path.join(aggregated_dir, 'aggregation_seasonal.csv'), index=False)
 print(f"\n✓ Ruajtur: aggregation_seasonal.csv")
 
-# Agregim sipas TimeOfDay
 print("\n" + "-"*80)
 print("AGREGIM SIPAS PJESËS SË DITËS")
 print("-"*80)
@@ -196,7 +195,6 @@ timeofday_agg = df.groupby('TimeOfDay').agg({
 timeofday_agg.columns = ['_'.join(col).strip('_') for col in timeofday_agg.columns.values]
 timeofday_agg.rename(columns={'TimeOfDay': 'TimeOfDay'}, inplace=True)
 
-# Rendit
 time_order = ['Morning', 'Afternoon', 'Evening', 'Night']
 timeofday_agg['TimeOfDay'] = pd.Categorical(timeofday_agg['TimeOfDay'], categories=time_order, ordered=True)
 timeofday_agg = timeofday_agg.sort_values('TimeOfDay')
@@ -204,10 +202,9 @@ timeofday_agg = timeofday_agg.sort_values('TimeOfDay')
 print(f"✓ Agregim sipas pjesës së ditës:")
 print(timeofday_agg[['TimeOfDay', 'Global_active_power_mean', 'Global_active_power_max']])
 
-timeofday_agg.to_csv('aggregation_timeofday.csv', index=False)
+timeofday_agg.to_csv(os.path.join(aggregated_dir, 'aggregation_timeofday.csv'), index=False)
 print(f"\n✓ Ruajtur: aggregation_timeofday.csv")
 
-# Agregim kombinuar: Hour + IsWeekend
 print("\n" + "-"*80)
 print("AGREGIM KOMBINUAR (HOUR × WEEKEND)")
 print("-"*80)
@@ -224,15 +221,14 @@ print(f"✓ Agregim Hour × Day_Type: {len(hour_weekend_agg)} kombinime")
 print(f"\nShembull (8:00-12:00):")
 print(hour_weekend_agg[(hour_weekend_agg['Hour'] >= 8) & (hour_weekend_agg['Hour'] <= 12)][['Hour', 'Day_Type', 'Global_active_power_mean']])
 
-hour_weekend_agg.to_csv('aggregation_hour_weekend.csv', index=False)
+hour_weekend_agg.to_csv(os.path.join(aggregated_dir, 'aggregation_hour_weekend.csv'), index=False)
 print(f"\n✓ Ruajtur: aggregation_hour_weekend.csv")
 
-# Raport agregimi
 print("\n" + "-"*80)
 print("KRIJIMI I RAPORTIT")
 print("-"*80)
 
-with open('aggregation_report.txt', 'w', encoding='utf-8') as f:
+with open(os.path.join(reports_analysis_dir, 'aggregation_report.txt'), 'w', encoding='utf-8') as f:
     f.write("RAPORTI I AGREGIMIT TË TË DHËNAVE\n")
     f.write("="*80 + "\n\n")
     f.write(f"Dataset origjinal: {df.shape[0]:,} rreshta\n")
@@ -287,9 +283,8 @@ with open('aggregation_report.txt', 'w', encoding='utf-8') as f:
     f.write(f"Highest season: {highest_season}\n")
     f.write(f"Lowest season: {lowest_season}\n")
 
-print("✓ Raport u ruajt: aggregation_report.txt")
+print(f"✓ Raport u ruajt: {os.path.join(reports_analysis_dir, 'aggregation_report.txt')}")
 
-# Përmbledhje
 print("\n" + "="*80)
 print("PËRMBLEDHJE E AGREGIMIT")
 print("="*80)

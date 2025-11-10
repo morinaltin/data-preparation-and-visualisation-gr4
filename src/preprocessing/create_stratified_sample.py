@@ -1,15 +1,11 @@
-"""
-Create a stratified sample directly from the full dataset
-"""
-
 import pandas as pd
 import numpy as np
+import os
 
 print("="*80)
 print("Creating Stratified Sample")
 print("="*80)
 
-# Load full dataset
 print("\nLoading full dataset...")
 df_full = pd.read_csv('household_power_consumption.txt', sep=';', na_values=['?'])
 df_full['DateTime'] = pd.to_datetime(df_full['Date'] + ' ' + df_full['Time'], 
@@ -23,16 +19,13 @@ print(f"Period: {df_full['DateTime'].min()} to {df_full['DateTime'].max()}")
 print("\nFull dataset yearly distribution:")
 print(df_full['Year'].value_counts().sort_index())
 
-# Stratified sampling by Year + Month
-target_sample_size = 1000000  # 50% of full data (~50 MB, good balance)
+target_sample_size = 1000000
 print(f"\nTarget sample size: {target_sample_size:,} rows")
 
-# Calculate sampling ratio
 total_rows = len(df_full)
 sampling_ratio = target_sample_size / total_rows
 print(f"Sampling ratio: {sampling_ratio:.4f} ({sampling_ratio*100:.2f}%)")
 
-# Stratified sampling
 print("\nPerforming stratified sampling...")
 df_full['Stratum'] = df_full['Year'].astype(str) + '_' + df_full['Month'].astype(str)
 strata = df_full.groupby('Stratum')
@@ -52,15 +45,12 @@ print(f"Actual sampling ratio: {len(df_stratified)/total_rows:.4f} ({len(df_stra
 print("\nStratified sample yearly distribution:")
 print(df_stratified['Year'].value_counts().sort_index())
 
-# Save stratified sample
-output_cols = ['Date', 'Time', 'Global_active_power', 'Global_reactive_power', 
+output_cols = ['Date', 'Time', 'Global_active_power', 'Global_reactive_power',
                'Voltage', 'Global_intensity', 'Sub_metering_1', 'Sub_metering_2', 
                'Sub_metering_3']
 output_file = 'household_power_consumption_sample.txt'
 df_stratified[output_cols].to_csv(output_file, sep=';', index=False)
 
-# Get file size
-import os
 file_size_mb = os.path.getsize(output_file) / (1024 * 1024)
 
 print(f"\n✓ Stratified sample saved: {output_file}")

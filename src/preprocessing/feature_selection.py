@@ -1,33 +1,37 @@
-"""
-Zgjedhja e Features dhe Analiza e Korrelacionit
-Kërkesat: Reduktimi i dimensionit, zgjedhja e vetive
-"""
-
 import pandas as pd
 import numpy as np
+import os
 
 print("="*80)
 print("ZGJEDHJA E FEATURES DHE ANALIZA E KORRELACIONIT")
 print("="*80)
 
-df = pd.read_csv('../../data/processed/household_power_consumption_transformed.csv')
+script_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.join(script_dir, '../..')
+
+processed_dir = os.path.join(project_root, 'data/processed')
+outputs_dir = os.path.join(project_root, 'outputs')
+reports_analysis_dir = os.path.join(project_root, 'reports/analysis')
+os.makedirs(processed_dir, exist_ok=True)
+os.makedirs(outputs_dir, exist_ok=True)
+os.makedirs(reports_analysis_dir, exist_ok=True)
+
+transformed_data_path = os.path.join(processed_dir, 'household_power_consumption_transformed.csv')
+df = pd.read_csv(transformed_data_path)
 df['DateTime'] = pd.to_datetime(df['DateTime'])
 
 print(f"\nDataset: {df.shape[0]:,} rreshta × {df.shape[1]} kolona")
 
-# Selekto vetëm kolonat numerike për korrelacion
 print("\n" + "-"*80)
 print("PËRZGJEDHJA E FEATURES NUMERIKE")
 print("-"*80)
 
 numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
-# Hiq disa kolona që nuk janë të nevojshme për korrelacion
 exclude_cols = ['Year', 'Month', 'Day', 'Minute', 'DayOfWeek', 'WeekOfYear']
 numeric_cols = [col for col in numeric_cols if col not in exclude_cols]
 
 print(f"Features numerike për analizë: {len(numeric_cols)}")
 
-# Matrica e korrelacionit
 print("\n" + "-"*80)
 print("MATRICA E KORRELACIONIT")
 print("-"*80)
@@ -35,7 +39,6 @@ print("-"*80)
 correlation_matrix = df[numeric_cols].corr()
 print(f"\nMatrica: {correlation_matrix.shape[0]} × {correlation_matrix.shape[1]}")
 
-# Identifiko korrelacione të forta
 print("\n" + "-"*80)
 print("KORRELACIONE TË FORTA (|r| > 0.7)")
 print("-"*80)
@@ -58,7 +61,6 @@ if high_corr:
 else:
     print("\nNuk ka korrelacione shumë të forta (|r| > 0.7)")
 
-# Identifiko features redundante
 print("\n" + "-"*80)
 print("FEATURES REDUNDANTE")
 print("-"*80)
@@ -68,7 +70,6 @@ for idx, row in enumerate(high_corr):
     feat1 = row['Feature_1']
     feat2 = row['Feature_2']
     
-    # Hiq feature me korrelacion më të ulët me target (Global_active_power)
     if 'Global_active_power' not in [feat1, feat2]:
         corr1 = abs(correlation_matrix.loc[feat1, 'Global_active_power'])
         corr2 = abs(correlation_matrix.loc[feat2, 'Global_active_power'])
@@ -85,12 +86,10 @@ if features_to_remove:
 else:
     print("\nNuk ka features redundante për të hequr")
 
-# Selekto features më të rëndësishme
 print("\n" + "-"*80)
 print("ZGJEDHJA E FEATURES FINALE")
 print("-"*80)
 
-# Features thelbësore që duhet të ruhen
 essential_features = [
     'DateTime', 'Date', 'Time',
     'Global_active_power', 'Global_reactive_power', 'Voltage', 'Global_intensity',
@@ -102,8 +101,7 @@ essential_features = [
     'Season_Encoded', 'TimeOfDay_Encoded'
 ]
 
-# Shto features shtesë që nuk janë redundante
-additional_features = [col for col in df.columns 
+additional_features = [col for col in df.columns
                        if col not in essential_features 
                        and col not in features_to_remove
                        and col in numeric_cols]
@@ -117,7 +115,6 @@ print(f"\nFeatures fillestare: {df.shape[1]}")
 print(f"Features të hequra: {len(features_to_remove)}")
 print(f"Features finale: {len(selected_features)}")
 
-# Statistika për features të zgjedhura
 print("\n" + "-"*80)
 print("STATISTIKA PËR FEATURES FINALE")
 print("-"*80)
@@ -126,22 +123,22 @@ numeric_selected = df_final.select_dtypes(include=[np.number]).columns
 print(f"\nNumerike: {len(numeric_selected)}")
 print(f"Kategorike: {len(selected_features) - len(numeric_selected)}")
 
-# Ruajtja
 print("\n" + "-"*80)
 print("RUAJTJA E DATASET-IT FINAL")
 print("-"*80)
 
-df_final.to_csv('../../data/processed/household_power_consumption_final.csv', index=False)
+final_data_path = os.path.join(processed_dir, 'household_power_consumption_final.csv')
+df_final.to_csv(final_data_path, index=False)
 print(f"\n✓ Dataset final u ruajt: data/processed/household_power_consumption_final.csv")
 print(f"  Rreshta: {df_final.shape[0]:,}")
 print(f"  Kolona: {df_final.shape[1]}")
 
-# Ruaj matricën e korrelacionit
-correlation_matrix.to_csv('../../outputs/correlation_matrix.csv')
+correlation_matrix_path = os.path.join(outputs_dir, 'correlation_matrix.csv')
+correlation_matrix.to_csv(correlation_matrix_path)
 print(f"✓ Matrica e korrelacionit: outputs/correlation_matrix.csv")
 
-# Raport
-with open('../../reports/analysis/feature_selection_report.txt', 'w', encoding='utf-8') as f:
+feature_selection_report_path = os.path.join(reports_analysis_dir, 'feature_selection_report.txt')
+with open(feature_selection_report_path, 'w', encoding='utf-8') as f:
     f.write("RAPORTI I ZGJEDHJES SË FEATURES\n")
     f.write("="*80 + "\n\n")
     
@@ -173,9 +170,8 @@ with open('../../reports/analysis/feature_selection_report.txt', 'w', encoding='
     for feat in selected_features:
         f.write(f"  - {feat}\n")
 
-print(f"✓ Raport: reports/analysis/feature_selection_report.txt")
+print(f"✓ Raport: {feature_selection_report_path}")
 
-# Përmbledhje
 print("\n" + "="*80)
 print("PËRMBLEDHJE E PARA-PROCESIMIT")
 print("="*80)

@@ -3,8 +3,8 @@ data/raw/household_power_consumption.txt
 data/raw/household_power_consumption.csv
 
 # Processed data files (too large)
-data/processed/*.csv
-data/aggregated/*.csv
+#data/processed/*.csv
+#data/aggregated/*.csv
 
 # Allow sample data
 !data/raw/*sample*.txt

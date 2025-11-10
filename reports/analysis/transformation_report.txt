@@ -1,0 +1,43 @@
+RAPORTI I TRANSFORMIMIT
+================================================================================
+
+DISKRETIZIMI:
+  - Power_Level (4 kategori: Low/Medium/High/Very High)
+  - Voltage_Level (5 kategori: Very Low/Low/Normal/High/Very High)
+
+Power_Level
+Low          225256
+Medium       221237
+High         222776
+Very High    222088
+
+Voltage_Level
+Very Low       1002
+Low           32633
+Normal       260844
+High         515499
+Very High     81379
+
+BINARIZIMI:
+  - Is_High_Power (0/1)
+    1 (High): 444,864 (49.9%)
+    0 (Low): 446,493
+
+  - Voltage_Normal_Binary (0/1)
+    1 (Normal): 776,488 (87.1%)
+    0 (Abnormal): 114,869
+
+ENCODING KATEGORIK:
+  - Season_Encoded (0=Winter, 1=Spring, 2=Summer, 3=Autumn)
+Season_Encoded
+0    210010
+1    226446
+2    233950
+3    220951
+
+  - TimeOfDay_Encoded (0=Night, 1=Morning, 2=Afternoon, 3=Evening)
+TimeOfDay_Encoded
+0    316045
+1    225869
+2    216016
+3    133427
