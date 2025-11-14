@@ -1,0 +1,45 @@
+======================================================================
+ Z-SCORE OUTLIER DETECTION - ANALYSIS
+======================================================================
+
+METHOD:
+Z-Score measures standard deviations from mean
+Formula: Z = (X - μ) / σ
+
+ADVANTAGES:
+- Simple, interpretable
+- Fast computation
+
+LIMITATIONS:
+- Univariate (per feature)
+- Assumes normal distribution
+
+======================================================================
+ PARAMETER EXPERIMENTATION
+======================================================================
+
+Threshold    Outliers        Percentage     
+------------------------------------------
+|Z| > 2.5        65,176       7.31%
+|Z| > 3.0        31,098       3.49%
+|Z| > 3.5        16,902       1.90%
+
+======================================================================
+ SELECTED THRESHOLD: |Z| > 3.0
+======================================================================
+
+Total outliers: 31,098
+Percentage: 3.49%
+
+OUTLIERS PER FEATURE:
+----------------------------------------------------------------------
+  Global_active_power              12,276  ( 1.38%)
+  Global_reactive_power             9,075  ( 1.02%)
+  Voltage                           5,327  ( 0.60%)
+  Global_intensity                 13,129  ( 1.47%)
+  Sub_metering_1                        0  ( 0.00%)
+  Sub_metering_2                    4,991  ( 0.56%)
+  Sub_metering_3                      111  ( 0.01%)
+
+Analysis completed: 2025-12-05 15:58:40.200135
+======================================================================
