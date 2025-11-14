@@ -4,7 +4,7 @@ from datetime import datetime
 import os
 
 def load_final_dataset():
-    data_path = '../../data/processed/household_power_consumption_final.csv'
+    data_path = '../../data/processed/household_power_consumption_cleaned.csv'
     
     print("Loading dataset...")
     df = pd.read_csv(data_path)
