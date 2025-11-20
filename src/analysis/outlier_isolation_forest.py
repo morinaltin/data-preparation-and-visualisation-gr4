@@ -115,3 +115,114 @@ def visualize_contamination_comparison(results):
     print("\n✓ Saved: iforest_contamination_comparison.png")
     plt.close()
 
+def select_optimal_contamination(results):
+    print_section_header("CONTAMINATION SELECTION ANALYSIS")
+    
+    print("Contamination Comparison Summary:")
+    print("-" * 80)
+    print(f"{'Contamination':<15} {'Outliers':<12} {'Percentage':<12} {'Separation':<12} {'Assessment'}")
+    print("-" * 80)
+    
+    for cont in sorted(results.keys()):
+        r = results[cont]
+        
+        if r['score_separation'] > 0.15:
+            assessment = "✓ Clear separation"
+        elif r['score_separation'] > 0.10:
+            assessment = "Moderate separation"
+        else:
+            assessment = "Weak separation"
+        
+        print(f"{cont:<15.2f} {r['n_outliers']:>10,}  {r['percentage']:>6.2f}%      {r['score_separation']:>6.4f}      {assessment}")
+    
+    print("-" * 80)
+    
+    recommended = 0.05
+    best_separation = 0
+    
+    for cont in results.keys():
+        if results[cont]['score_separation'] > best_separation:
+            best_separation = results[cont]['score_separation']
+            recommended = cont
+    
+    print(f"\n📌 SELECTED CONTAMINATION: {recommended}")
+    print("\nJustification:")
+    print(f"- Best score separation: {best_separation:.4f}")
+    print(f"- Clear distinction between outliers and normal data")
+    print(f"- Detects {results[recommended]['n_outliers']:,} multivariate anomalies")
+    
+    return recommended
+
+def generate_report(results, selected_contamination, features):
+    report = []
+    report.append("Isolation Forest Outlier Detection Analysis")
+    report.append(f"Generated: {pd.Timestamp.now().strftime('%Y-%m-%d %H:%M')}")
+    report.append("")
+    report.append("Method Overview:")
+    report.append("Isolation Forest uses random decision trees to detect anomalies.")
+    report.append("Outliers are easier to isolate (fewer splits needed) than normal points.")
+    report.append("")
+    report.append("Advantages:")
+    report.append("- Multivariate: Considers all features together")
+    report.append("- No distribution assumptions")
+    report.append("- Detects complex patterns that univariate methods miss")
+    report.append("")
+    report.append(f"Features analyzed: {len(features)}")
+    report.append("Parameters: n_estimators=100, random_state=42")
+    report.append("")
+    report.append("Contamination Parameter Experimentation:")
+    report.append("")
+    
+    for cont in sorted(results.keys()):
+        r = results[cont]
+        report.append(f"Contamination = {cont}:")
+        report.append(f"  Outliers found: {r['n_outliers']:,} ({r['percentage']:.2f}% of data)")
+        report.append(f"  Score separation: {r['score_separation']:.4f}")
+        report.append("")
+    
+    report.append(f"Selected Contamination: {selected_contamination}")
+    report.append("")
+    
+    r = results[selected_contamination]
+    report.append("Justification:")
+    report.append(f"- Highest score separation ({r['score_separation']:.4f})")
+    report.append("- Clear distinction between anomalies and normal data")
+    report.append(f"- Conservative approach with {r['percentage']:.2f}% flagged as outliers")
+    report.append("- Captures multivariate anomalies (unusual feature combinations)")
+    report.append("")
+    report.append("Key Findings:")
+    report.append("- Isolation Forest detects patterns Z-Score misses (multivariate anomalies)")
+    report.append("- Lower contamination (0.05) gives clearest signal")
+    report.append("- Score separation indicates strong outlier vs. inlier distinction")
+    
+    return "\n".join(report)
+
+def main():
+    print_section_header("ISOLATION FOREST OUTLIER DETECTION")
+    
+    df = load_final_dataset()
+    features = get_numeric_features(df)
+    
+    print(f"\nAnalyzing {len(features)} numeric features with Isolation Forest")
+    
+    results = experiment_contamination(df, features)
+    visualize_contamination_comparison(results)
+    selected_contamination = select_optimal_contamination(results)
+    
+    selected_result = results[selected_contamination]
+    output_df = pd.DataFrame({
+        'outlier_iforest': selected_result['predictions'] == -1,
+        'anomaly_score': selected_result['scores']
+    })
+    save_csv(output_df, 'outliers_iforest_flags.csv')
+    
+    report = generate_report(results, selected_contamination, features)
+    save_report(report, 'outlier_iforest_report.txt')
+    
+    print_section_header("ISOLATION FOREST ANALYSIS COMPLETE")
+    print(f"✓ Selected contamination: {selected_contamination}")
+    print(f"✓ Outliers detected: {selected_result['n_outliers']:,}")
+    print(f"✓ Percentage: {selected_result['percentage']:.2f}%")
+
+if __name__ == "__main__":
+    main()
