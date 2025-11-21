@@ -1,0 +1,41 @@
+Isolation Forest Outlier Detection Analysis
+Generated: 2025-12-05 16:47
+
+Method Overview:
+Isolation Forest uses random decision trees to detect anomalies.
+Outliers are easier to isolate (fewer splits needed) than normal points.
+
+Advantages:
+- Multivariate: Considers all features together
+- No distribution assumptions
+- Detects complex patterns that univariate methods miss
+
+Features analyzed: 7
+Parameters: n_estimators=100, random_state=42
+
+Contamination Parameter Experimentation:
+
+Contamination = 0.05:
+  Outliers found: 44,568 (5.00% of data)
+  Score separation: 0.1769
+
+Contamination = 0.1:
+  Outliers found: 89,136 (10.00% of data)
+  Score separation: 0.1527
+
+Contamination = 0.15:
+  Outliers found: 133,704 (15.00% of data)
+  Score separation: 0.1387
+
+Selected Contamination: 0.05
+
+Justification:
+- Highest score separation (0.1769)
+- Clear distinction between anomalies and normal data
+- Conservative approach with 5.00% flagged as outliers
+- Captures multivariate anomalies (unusual feature combinations)
+
+Key Findings:
+- Isolation Forest detects patterns Z-Score misses (multivariate anomalies)
+- Lower contamination (0.05) gives clearest signal
+- Score separation indicates strong outlier vs. inlier distinction
