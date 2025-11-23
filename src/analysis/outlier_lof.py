@@ -191,3 +191,32 @@ def generate_report(results, selected_n_neighbors, features):
     
     return "\n".join(report)
 
+def main():
+    print_section_header("LOF (LOCAL OUTLIER FACTOR) OUTLIER DETECTION")
+    
+    df = load_final_dataset()
+    features = get_numeric_features(df)
+    
+    print(f"\nAnalyzing {len(features)} numeric features with LOF")
+    
+    results = experiment_neighbors(df, features)
+    visualize_neighbors_comparison(results)
+    selected_n_neighbors = select_optimal_neighbors(results)
+    
+    selected_result = results[selected_n_neighbors]
+    output_df = pd.DataFrame({
+        'outlier_lof': selected_result['predictions'] == -1,
+        'lof_score': selected_result['lof_values']
+    })
+    save_csv(output_df, 'outliers_lof_flags.csv')
+    
+    report = generate_report(results, selected_n_neighbors, features)
+    save_report(report, 'outlier_lof_report.txt')
+    
+    print_section_header("LOF ANALYSIS COMPLETE")
+    print(f"✓ Selected n_neighbors: {selected_n_neighbors}")
+    print(f"✓ Outliers detected: {selected_result['n_outliers']:,}")
+    print(f"✓ Percentage: {selected_result['percentage']:.2f}%")
+
+if __name__ == "__main__":
+    main()
