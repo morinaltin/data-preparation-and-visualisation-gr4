@@ -1,0 +1,41 @@
+LOF (Local Outlier Factor) Outlier Detection Analysis
+Generated: 2025-12-05 17:15
+
+Method Overview:
+LOF detects outliers based on local density.
+Points in low-density areas compared to neighbors are flagged as outliers.
+LOF score > 1 indicates outlier (lower density than neighbors).
+
+Advantages:
+- Density-based: Detects local anomalies within clusters
+- No distribution assumptions
+- Good for data with varying densities
+
+Features analyzed: 7
+
+n_neighbors Parameter Experimentation:
+
+n_neighbors = 10:
+  Outliers found: 24,180 (2.71% of data)
+  Average LOF score: 592102.1218
+
+n_neighbors = 20:
+  Outliers found: 18,267 (2.05% of data)
+  Average LOF score: 176248.6949
+
+n_neighbors = 50:
+  Outliers found: 16,420 (1.84% of data)
+  Average LOF score: 609050.4008
+
+Selected n_neighbors: 20
+
+Justification:
+- Balanced approach for local and global anomaly detection
+- Detected 18,267 outliers (2.05%)
+- Standard parameter choice in density-based outlier detection
+- Avoids over-sensitivity to very local variations
+
+Key Findings:
+- LOF detects points in sparse regions (low local density)
+- Different from Isolation Forest (which uses tree isolation)
+- Captures local context that univariate methods miss
