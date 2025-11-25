@@ -1,0 +1,37 @@
+Outlier Detection Method Comparison
+Generated: 2025-12-05 17:22
+
+Summary:
+This analysis compares three outlier detection methods:
+1. Z-Score (univariate statistical)
+2. Isolation Forest (multivariate ML-based)
+3. LOF (density-based)
+
+Individual Method Results:
+
+Z-Score: 31,098 outliers (3.49%)
+Isolation Forest: 44,568 outliers (5.00%)
+LOF: 18,267 outliers (2.05%)
+
+Overlap Analysis:
+
+Only Z-Score: 6,877 (0.77%)
+Only Isolation Forest: 20,252 (2.27%)
+Only LOF: 16,478 (1.85%)
+Z-Score + Isolation Forest: 22,764 (2.55%)
+Z-Score + LOF: 237 (0.03%)
+Isolation Forest + LOF: 332 (0.04%)
+All 3 Methods: 1,220 (0.14%)
+
+Consensus Outliers (2+ methods agree): 24,553 (2.75%)
+
+Key Findings:
+- 1,220 outliers detected by all 3 methods (high confidence)
+- 24,553 outliers detected by at least 2 methods (moderate-high confidence)
+- Isolation Forest detected most outliers (multivariate approach)
+- LOF detected fewest outliers (density-based, more conservative)
+- Z-Score middle ground (univariate statistical)
+
+Recommendation:
+Use consensus outliers (2+ methods) for high-confidence anomaly detection.
+This balances sensitivity with specificity.
