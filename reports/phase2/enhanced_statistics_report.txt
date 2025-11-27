@@ -1,0 +1,98 @@
+Enhanced Statistical Analysis Report
+Generated: 2025-12-05 17:33
+
+This report provides advanced statistical measures beyond basic descriptive statistics.
+
+Key Metrics Explained:
+
+Skewness: Measures distribution asymmetry
+  - Near 0: Symmetric distribution
+  - Positive: Right-skewed (long tail on right)
+  - Negative: Left-skewed (long tail on left)
+
+Kurtosis: Measures tail heaviness
+  - Near 0: Normal distribution
+  - Positive: Heavy tails (more extreme values)
+  - Negative: Light tails (fewer extreme values)
+
+95% Confidence Interval: Range where true mean likely falls (95% confidence)
+
+======================================================================
+FEATURE-BY-FEATURE ANALYSIS
+======================================================================
+
+Global_active_power:
+  Mean: 0.8918 (95% CI: [0.8901, 0.8934])
+  Median: 0.4740
+  Std Dev: 0.7841
+  Range: [0.0760, 5.1820]
+  IQR: 1.1140 (Q1: 0.2960, Q3: 1.4100)
+  Skewness: 1.3332 - Highly right-skewed
+  Kurtosis: 1.7021 - Heavy-tailed (leptokurtic) - more outliers
+
+Global_reactive_power:
+  Mean: 0.1159 (95% CI: [0.1156, 0.1161])
+  Median: 0.0960
+  Std Dev: 0.1036
+  Range: [0.0000, 0.6320]
+  IQR: 0.1380 (Q1: 0.0460, Q3: 0.1840)
+  Skewness: 1.0294 - Highly right-skewed
+  Kurtosis: 1.1402 - Heavy-tailed (leptokurtic) - more outliers
+
+Voltage:
+  Mean: 241.0854 (95% CI: [241.0790, 241.0919])
+  Median: 241.2000
+  Std Dev: 3.1091
+  Range: [227.3100, 254.1500]
+  IQR: 3.7014 (Q1: 239.3186, Q3: 243.0200)
+  Skewness: -0.2543 - Approximately symmetric
+  Kurtosis: 0.6608 - Heavy-tailed (leptokurtic) - more outliers
+
+Global_intensity:
+  Mean: 3.7783 (95% CI: [3.7715, 3.7851])
+  Median: 2.2000
+  Std Dev: 3.2584
+  Range: [0.2000, 21.4000]
+  IQR: 4.6000 (Q1: 1.2000, Q3: 5.8000)
+  Skewness: 1.3735 - Highly right-skewed
+  Kurtosis: 1.9419 - Heavy-tailed (leptokurtic) - more outliers
+
+Sub_metering_1:
+  Mean: 0.0000 (95% CI: [nan, nan])
+  Median: 0.0000
+  Std Dev: 0.0000
+  Range: [0.0000, 0.0000]
+  IQR: 0.0000 (Q1: 0.0000, Q3: 0.0000)
+  Skewness: nan - Highly left-skewed
+  Kurtosis: nan - Light-tailed (platykurtic) - fewer outliers
+
+Sub_metering_2:
+  Mean: 0.3649 (95% CI: [0.3636, 0.3663])
+  Median: 0.0000
+  Std Dev: 0.6594
+  Range: [0.0000, 4.0000]
+  IQR: 1.0000 (Q1: 0.0000, Q3: 1.0000)
+  Skewness: 1.8418 - Highly right-skewed
+  Kurtosis: 3.2264 - Heavy-tailed (leptokurtic) - more outliers
+
+Sub_metering_3:
+  Mean: 5.8691 (95% CI: [5.8521, 5.8862])
+  Median: 1.0000
+  Std Dev: 8.2126
+  Range: [0.0000, 31.0000]
+  IQR: 17.0000 (Q1: 0.0000, Q3: 17.0000)
+  Skewness: 0.8900 - Moderately right-skewed
+  Kurtosis: -1.0039 - Light-tailed (platykurtic) - fewer outliers
+
+======================================================================
+KEY FINDINGS
+======================================================================
+
+Highly skewed features: Global_active_power, Global_reactive_power, Global_intensity, Sub_metering_2
+  Implication: Not normally distributed, outliers likely
+Heavy-tailed features: Global_active_power, Global_reactive_power, Global_intensity, Sub_metering_2
+  Implication: More extreme values than normal distribution
+
+Recommendation:
+Features with high skewness/kurtosis may benefit from transformation
+(e.g., log transform) before using in statistical models that assume normality.
