@@ -1,0 +1,4 @@
+Feature_1,Feature_2,Correlation
+Global_active_power,Global_intensity,0.998505813162056
+Global_active_power,Sub_metering_3,0.7427284971385579
+Global_intensity,Sub_metering_3,0.7320073656997684

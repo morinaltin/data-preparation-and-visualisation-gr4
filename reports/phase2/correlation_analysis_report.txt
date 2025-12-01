@@ -1,0 +1,23 @@
+Correlation and Covariance Analysis Report
+Generated: 2025-12-05 18:41
+
+Correlation measures the strength of linear relationships between features.
+Values range from -1 to +1:
+  +1 = perfect positive correlation
+   0 = no correlation
+  -1 = perfect negative correlation
+
+Strong Correlations (|r| >= 0.7):
+
+Global_active_power ↔ Global_intensity: 0.999 (positive)
+Global_active_power ↔ Sub_metering_3: 0.743 (positive)
+Global_intensity ↔ Sub_metering_3: 0.732 (positive)
+
+Key Findings:
+
+Strongest correlation: Global_active_power ↔ Global_intensity (0.999)
+
+Implications:
+- Highly correlated features contain redundant information
+- PCA will capture this correlation and reduce dimensionality
+- Multivariate outlier detection benefits from understanding correlations
