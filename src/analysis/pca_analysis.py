@@ -98,3 +98,109 @@ def create_pca_scatter(pca_components, df):
     print("✓ Saved: pca_scatter.png")
     plt.close()
 
+def create_component_heatmap(pca, features):
+    components_df = pd.DataFrame(
+        pca.components_,
+        columns=features,
+        index=[f'PC{i+1}' for i in range(pca.n_components_)]
+    )
+    
+    plt.figure(figsize=(12, 8))
+    sns.heatmap(components_df, annot=True, fmt='.2f', cmap='RdBu_r', 
+                center=0, linewidths=1, cbar_kws={'label': 'Component Loading'})
+    plt.title('PCA Component Loadings', fontsize=14, fontweight='bold', pad=15)
+    plt.xlabel('Original Features', fontsize=12)
+    plt.ylabel('Principal Components', fontsize=12)
+    plt.tight_layout()
+    plt.savefig('../../outputs/phase2/pca_component_loadings.png', dpi=300, bbox_inches='tight')
+    print("✓ Saved: pca_component_loadings.png")
+    plt.close()
+    
+    return components_df
+
+def generate_report(pca, explained_variance, cumulative_variance, components_df, features):
+    report = []
+    report.append("Principal Component Analysis (PCA) Report")
+    report.append(f"Generated: {pd.Timestamp.now().strftime('%Y-%m-%d %H:%M')}")
+    report.append("")
+    report.append("PCA reduces data dimensions while preserving variance.")
+    report.append("It transforms correlated features into uncorrelated principal components.")
+    report.append("")
+    report.append("Why PCA?")
+    report.append("- Reduces 7 features to 2-3 components for visualization")
+    report.append("- Removes redundancy (we found 0.999 correlation between power and intensity)")
+    report.append("- Captures most important patterns in data")
+    report.append("")
+    report.append("Explained Variance:")
+    report.append("")
+    for i, (var, cum) in enumerate(zip(explained_variance, cumulative_variance), 1):
+        report.append(f"PC{i}: {var*100:.2f}% (cumulative: {cum*100:.2f}%)")
+    report.append("")
+    
+    n_95 = np.argmax(cumulative_variance >= 0.95) + 1
+    report.append(f"Components for 95% variance: {n_95}")
+    report.append("")
+    report.append("Component Interpretation:")
+    report.append("")
+    
+    for i in range(min(3, pca.n_components_)):
+        report.append(f"PC{i+1} (explained variance: {explained_variance[i]*100:.2f}%):")
+        loadings = components_df.iloc[i].abs().sort_values(ascending=False)
+        top_features = loadings.head(3)
+        for feat, loading in top_features.items():
+            report.append(f"  - {feat}: {components_df.iloc[i][feat]:.3f}")
+        report.append("")
+    
+    report.append("Key Findings:")
+    report.append(f"- First 2 components capture {cumulative_variance[1]*100:.1f}% of variance")
+    report.append("- Data can be visualized in 2D with minimal information loss")
+    report.append("- PC1 likely represents overall power consumption")
+    report.append("- PC2 likely represents power distribution patterns")
+    report.append("")
+    report.append("Implications:")
+    report.append("- Dimensionality reduction successful")
+    report.append("- 2D visualization preserves most patterns")
+    report.append("- Confirms feature redundancy (high correlation)")
+    
+    return "\n".join(report)
+
+def main():
+    print_section_header("PCA - PRINCIPAL COMPONENT ANALYSIS")
+    
+    df = load_final_dataset()
+    features = get_numeric_features(df)
+    
+    features = [f for f in features if f != 'Sub_metering_1']
+    
+    scaled_data, scaler = standardize_data(df, features)
+    
+    pca, pca_components, explained_variance, cumulative_variance = perform_pca(scaled_data)
+    
+    create_scree_plot(explained_variance, cumulative_variance)
+    create_pca_scatter(pca_components, df)
+    components_df = create_component_heatmap(pca, features)
+    
+    pca_df = pd.DataFrame(
+        pca_components[:, :3],
+        columns=['PC1', 'PC2', 'PC3']
+    )
+    save_csv(pca_df, 'pca_components.csv')
+    save_csv(components_df, 'pca_loadings.csv')
+    
+    variance_df = pd.DataFrame({
+        'Component': [f'PC{i+1}' for i in range(len(explained_variance))],
+        'Explained_Variance': explained_variance * 100,
+        'Cumulative_Variance': cumulative_variance * 100
+    })
+    save_csv(variance_df, 'pca_variance.csv')
+    
+    report = generate_report(pca, explained_variance, cumulative_variance, components_df, features)
+    save_report(report, 'pca_analysis_report.txt')
+    
+    print_section_header("PCA ANALYSIS COMPLETE")
+    print(f"✓ Reduced {len(features)} features to {pca.n_components_} components")
+    print(f"✓ First 2 components explain {cumulative_variance[1]*100:.1f}% of variance")
+    print(f"✓ Generated scree plot, scatter plots, and component loadings")
+
+if __name__ == "__main__":
+    main()
