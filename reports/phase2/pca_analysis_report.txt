@@ -1,0 +1,49 @@
+Principal Component Analysis (PCA) Report
+Generated: 2025-12-05 18:55
+
+PCA reduces data dimensions while preserving variance.
+It transforms correlated features into uncorrelated principal components.
+
+Why PCA?
+- Reduces 7 features to 2-3 components for visualization
+- Removes redundancy (we found 0.999 correlation between power and intensity)
+- Captures most important patterns in data
+
+Explained Variance:
+
+PC1: 47.46% (cumulative: 47.46%)
+PC2: 23.02% (cumulative: 70.48%)
+PC3: 14.29% (cumulative: 84.77%)
+PC4: 9.75% (cumulative: 94.52%)
+PC5: 5.47% (cumulative: 99.98%)
+PC6: 0.02% (cumulative: 100.00%)
+
+Components for 95% variance: 5
+
+Component Interpretation:
+
+PC1 (explained variance: 47.46%):
+  - Global_intensity: 0.571
+  - Global_active_power: 0.570
+  - Sub_metering_3: 0.497
+
+PC2 (explained variance: 23.02%):
+  - Sub_metering_2: 0.713
+  - Global_reactive_power: 0.678
+  - Sub_metering_3: -0.151
+
+PC3 (explained variance: 14.29%):
+  - Voltage: 0.961
+  - Sub_metering_3: 0.185
+  - Global_active_power: 0.148
+
+Key Findings:
+- First 2 components capture 70.5% of variance
+- Data can be visualized in 2D with minimal information loss
+- PC1 likely represents overall power consumption
+- PC2 likely represents power distribution patterns
+
+Implications:
+- Dimensionality reduction successful
+- 2D visualization preserves most patterns
+- Confirms feature redundancy (high correlation)
