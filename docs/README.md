@@ -557,6 +557,238 @@ python pca_analysis.py
 - **Reports**: 8 detailed analysis reports
 - **Summary**: `reports/phase2/PHASE2_SUMMARY_REPORT.txt`
 
+---
+
+### Step-by-Step Outputs Reference
+
+This section maps each analysis step to its specific outputs for easy professor demonstration:
+
+#### Step 3: Z-Score Outlier Detection
+**Run**: `python src/analysis/outlier_zscore.py`
+
+**What it produces**:
+```
+outputs/phase2/
+├── outliers_zscore_flags.csv           # Boolean flags per row (True = outlier)
+└── zscore_threshold_comparison.png     # Bar chart comparing thresholds 2.5, 3.0, 3.5
+
+reports/phase2/
+└── outlier_zscore_report.txt           # Analysis report with justifications
+```
+
+**Visualization**:
+
+<img src="../outputs/phase2/zscore_threshold_comparison.png" width="600" alt="Z-Score Threshold Comparison">
+
+**Show professor**: 
+- Open `zscore_threshold_comparison.png` to show parameter testing
+- Open `outlier_zscore_report.txt` to explain why threshold 3.0 was chosen
+
+---
+
+#### Step 4: Isolation Forest Outlier Detection
+**Run**: `python src/analysis/outlier_isolation_forest.py`
+
+**What it produces**:
+```
+outputs/phase2/
+├── outliers_iforest_flags.csv          # Boolean flags + anomaly scores
+└── iforest_contamination_comparison.png # 4-panel comparison (0.05, 0.10, 0.15)
+
+reports/phase2/
+└── outlier_iforest_report.txt          # ML-based analysis report
+```
+
+**Visualization**:
+
+<img src="../outputs/phase2/iforest_contamination_comparison.png" width="600" alt="Isolation Forest Contamination Comparison">
+
+**Show professor**: 
+- Open `iforest_contamination_comparison.png` to show 4 panels:
+  1. Number of outliers by contamination
+  2. Percentage flagged
+  3. Anomaly score separation
+  4. Score distributions
+
+---
+
+#### Step 5: LOF (Local Outlier Factor)
+**Run**: `python src/analysis/outlier_lof.py`
+
+**What it produces**:
+```
+outputs/phase2/
+├── outliers_lof_flags.csv              # Boolean flags + LOF scores
+└── lof_neighbors_comparison.png        # 4-panel comparison (n=10, 20, 50)
+
+reports/phase2/
+└── outlier_lof_report.txt              # Density-based analysis report
+```
+
+**Visualization**:
+
+<img src="../outputs/phase2/lof_neighbors_comparison.png" width="600" alt="LOF Neighbors Comparison">
+
+**Show professor**: 
+- Open `lof_neighbors_comparison.png` to show parameter testing
+- Explain that n=20 was chosen as balanced
+
+---
+
+#### Step 6: Method Comparison
+**Run**: `python src/analysis/outlier_comparison.py`
+
+**What it produces**:
+```
+outputs/phase2/
+├── outlier_method_comparison.csv       # Comparison matrix (all methods)
+├── outlier_method_venn.png             # Venn diagram showing overlap
+└── outlier_method_comparison.png       # Bar charts comparing all methods
+
+reports/phase2/
+└── outlier_method_comparison_report.txt # Consensus analysis
+```
+
+**Visualizations**:
+
+<img src="../outputs/phase2/outlier_method_venn.png" width="600" alt="Method Venn Diagram">
+
+<img src="../outputs/phase2/outlier_method_comparison.png" width="600" alt="Method Comparison Charts">
+
+**Show professor**: 
+- **START HERE** - Open `outlier_method_venn.png` (most impressive visual)
+- Show overlap: 1,220 detected by all 3 methods
+- Open `outlier_method_comparison.csv` to show the comparison matrix
+
+---
+
+#### Step 7: Enhanced Statistics
+**Run**: `python src/analysis/enhanced_statistics.py`
+
+**What it produces**:
+```
+outputs/phase2/
+├── enhanced_statistics.csv                    # All statistics per feature
+├── enhanced_statistics_distributions.png      # Histograms for all features
+└── enhanced_statistics_summary.png            # 4-panel summary (skewness, kurtosis, CV, CI)
+
+reports/phase2/
+└── enhanced_statistics_report.txt             # Statistical analysis
+```
+
+**Visualization**:
+
+<img src="../outputs/phase2/enhanced_statistics_summary.png" width="600" alt="Enhanced Statistics Summary">
+
+**Show professor**: 
+- Open `enhanced_statistics_summary.png` to show:
+  1. Skewness (all positive = right-skewed)
+  2. Kurtosis (all positive = heavy tails)
+  3. Coefficient of variation
+  4. Confidence interval widths
+
+---
+
+#### Step 8: Distribution Analysis
+**Run**: `python src/analysis/distribution_analysis.py`
+
+**What it produces**:
+```
+outputs/phase2/
+├── normality_tests.csv                 # Shapiro-Wilk, KS test results
+├── qq_plots.png                        # Q-Q plots for all features (7 panels)
+├── distribution_vs_normal.png          # Actual vs. theoretical normal (7 panels)
+└── kde_plots.png                       # Kernel density estimates (7 panels)
+
+reports/phase2/
+└── distribution_analysis_report.txt    # Normality test report
+```
+
+**Visualization**:
+
+<img src="../outputs/phase2/qq_plots.png" width="600" alt="Q-Q Plots">
+
+**Show professor**: 
+- Open `qq_plots.png` to show points don't follow diagonal = non-normal
+- Open `normality_tests.csv` to show test results (only 1/7 normal)
+
+---
+
+#### Step 9: Correlation Analysis
+**Run**: `python src/analysis/correlation_analysis.py`
+
+**What it produces**:
+```
+outputs/phase2/
+├── correlation_matrix.csv              # Correlation values (all pairs)
+├── covariance_matrix.csv               # Covariance values
+├── strong_correlations.csv             # Pairs with |r| >= 0.7
+├── correlation_heatmap.png             # Color-coded correlation matrix
+└── covariance_heatmap.png              # Covariance visualization
+
+reports/phase2/
+└── correlation_analysis_report.txt     # Correlation findings
+```
+
+**Visualization**:
+
+<img src="../outputs/phase2/correlation_heatmap.png" width="600" alt="Correlation Heatmap">
+
+**Show professor**: 
+- **IMPORTANT** - Open `correlation_heatmap.png`
+- Point out 0.999 correlation (power-intensity)
+- Explain why (mathematically related: Intensity = Power/Voltage)
+
+---
+
+#### Step 10: PCA (Principal Component Analysis)
+**Run**: `python src/analysis/pca_analysis.py`
+
+**What it produces**:
+```
+outputs/phase2/
+├── pca_components.csv                  # Transformed data (PC1, PC2, PC3)
+├── pca_loadings.csv                    # Feature contributions to PCs
+├── pca_variance.csv                    # Variance explained per component
+├── pca_scree_plot.png                  # 2-panel: variance by component + cumulative
+├── pca_scatter.png                     # 2D scatter (PC1 vs PC2, PC1 vs PC3)
+└── pca_component_loadings.png          # Heatmap of feature loadings
+
+reports/phase2/
+└── pca_analysis_report.txt             # PCA interpretation
+```
+
+**Visualizations**:
+
+<img src="../outputs/phase2/pca_scree_plot.png" width="600" alt="PCA Scree Plot">
+
+<img src="../outputs/phase2/pca_scatter.png" width="600" alt="PCA Scatter Plot">
+
+**Show professor**: 
+- Open `pca_scree_plot.png` to show:
+  1. PC1 = 47%, PC2 = 23% (total 70%)
+  2. Cumulative variance curve
+- Open `pca_scatter.png` to show 2D visualization of data
+
+---
+
+### Quick Access for Professor Demo
+
+**Most impressive visualizations** (open these first):
+1. `outputs/phase2/outlier_method_venn.png` - Venn diagram (method overlap)
+2. `outputs/phase2/correlation_heatmap.png` - Correlation matrix
+3. `outputs/phase2/pca_scree_plot.png` - PCA variance explained
+
+**Key CSV files** (if professor asks for data):
+1. `outputs/phase2/outlier_method_comparison.csv` - All outlier flags combined
+2. `outputs/phase2/correlation_matrix.csv` - All correlation values
+3. `outputs/phase2/enhanced_statistics.csv` - All statistics
+
+**Master report** (if professor wants full summary):
+- `reports/phase2/PHASE2_SUMMARY_REPORT.txt` - Comprehensive summary of everything
+
+
+
 See `docs/EXECUTION_GUIDE.md` for detailed execution instructions.
 
 ---
