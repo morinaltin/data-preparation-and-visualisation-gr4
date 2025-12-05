@@ -1,0 +1,83 @@
+Distribution Analysis and Normality Test Report
+Generated: 2025-12-05 17:52
+
+This report tests whether features follow a normal (Gaussian) distribution.
+
+Tests Performed:
+
+1. Shapiro-Wilk Test
+   - Tests null hypothesis: data is normally distributed
+   - p-value < 0.05 → reject null → data is NOT normal
+
+2. Kolmogorov-Smirnov Test
+   - Compares sample distribution to normal distribution
+   - p-value < 0.05 → data significantly different from normal
+
+3. Q-Q Plots
+   - Visual test: points should follow diagonal line if normal
+   - Deviations indicate non-normality
+
+======================================================================
+NORMALITY TEST RESULTS
+======================================================================
+
+Global_active_power:
+  Shapiro-Wilk p-value: 1.7727e-47
+  Result: Not Normal
+  Kolmogorov-Smirnov p-value: 0.0000e+00
+  Result: Not Normal
+
+Global_reactive_power:
+  Shapiro-Wilk p-value: 1.9593e-50
+  Result: Not Normal
+  Kolmogorov-Smirnov p-value: 0.0000e+00
+  Result: Not Normal
+
+Voltage:
+  Shapiro-Wilk p-value: 2.3517e-25
+  Result: Not Normal
+  Kolmogorov-Smirnov p-value: 0.0000e+00
+  Result: Not Normal
+
+Global_intensity:
+  Shapiro-Wilk p-value: 1.0820e-46
+  Result: Not Normal
+  Kolmogorov-Smirnov p-value: 0.0000e+00
+  Result: Not Normal
+
+Sub_metering_1:
+  Shapiro-Wilk p-value: 1.0000e+00
+  Result: Normal
+  Kolmogorov-Smirnov p-value: nan
+  Result: Not Normal
+
+Sub_metering_2:
+  Shapiro-Wilk p-value: 3.3525e-76
+  Result: Not Normal
+  Kolmogorov-Smirnov p-value: 0.0000e+00
+  Result: Not Normal
+
+Sub_metering_3:
+  Shapiro-Wilk p-value: 4.3264e-72
+  Result: Not Normal
+  Kolmogorov-Smirnov p-value: 0.0000e+00
+  Result: Not Normal
+
+======================================================================
+SUMMARY
+======================================================================
+
+Features passing normality (Shapiro-Wilk): 1/7
+
+FINDING: Most features are not normally distributed.
+
+Implications:
+- Use caution with parametric statistical tests
+- Non-parametric methods may be more robust
+
+Recommendation:
+Given the non-normal distributions, our use of:
+- Isolation Forest (no normality assumption) ✓
+- LOF (no normality assumption) ✓
+- Z-Score (assumes normality) - use with caution
+was appropriate.
