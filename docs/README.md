@@ -18,279 +18,259 @@
   </tr>
 </table>
 
-# Individual Household Electric Power Consumption
+# Konsumi Individual i Energjisë Elektrike Familjare
 
-Analysis and preprocessing of household electric power consumption dataset.
+Analiza dhe parapërpunimi i të dhënave të konsumit të energjisë elektrike familjare.
 
-## Dataset
+## Të Dhënat
 
-This project uses the **Individual Household Electric Power Consumption** dataset from the UCI Machine Learning Repository.
+Ky projekt përdor datasetin **Individual Household Electric Power Consumption** nga UCI Machine Learning Repository.
 
-- **Source**: [UCI ML Repository](https://archive.ics.uci.edu/ml/datasets/individual+household+electric+power+consumption)
-- **Period**: December 2006 - November 2010 (47 months)
-- **Measurements**: ~2 million minute-by-minute recordings
-- **Size**: ~127 MB (txt), ~138 MB (csv)
+- **Burimi**: [UCI ML Repository](https://archive.ics.uci.edu/ml/datasets/individual+household+electric+power+consumption)
+- **Periudha**: Dhjetor 2006 - Nëntor 2010 (47 muaj)
+- **Matjet**: ~2 milionë regjistrime minutë-pas-minute
+- **Madhësia**: ~127 MB (txt), ~138 MB (csv)
 
-### Original Variables
+### Variablat Origjinale
 
-| Variable | Description | Unit |
-|----------|-------------|------|
-| Date | Date in format dd/mm/yyyy | - |
-| Time | Time in format hh:mm:ss | - |
-| Global_active_power | Household global minute-averaged active power | kilowatt |
-| Global_reactive_power | Household global minute-averaged reactive power | kilowatt |
-| Voltage | Minute-averaged voltage | volt |
-| Global_intensity | Household global minute-averaged current intensity | ampere |
-| Sub_metering_1 | Energy sub-metering No. 1 (kitchen) | watt-hour |
-| Sub_metering_2 | Energy sub-metering No. 2 (laundry) | watt-hour |
-| Sub_metering_3 | Energy sub-metering No. 3 (climate control) | watt-hour |
+| Variabli | Përshkrimi | Njësia |
+|----------|------------|--------|
+| Date | Data në formatin dd/mm/yyyy | - |
+| Time | Koha në formatin hh:mm:ss | - |
+| Global_active_power | Fuqia aktive globale mesatare për minutë | kilovat |
+| Global_reactive_power | Fuqia reaktive globale mesatare për minutë | kilovat |
+| Voltage | Tensioni mesatar për minutë | volt |
+| Global_intensity | Intensiteti global i rrymës mesatare për minutë | amper |
+| Sub_metering_1 | Nën-matësi i energjisë Nr. 1 (kuzhinë) | vat-orë |
+| Sub_metering_2 | Nën-matësi i energjisë Nr. 2 (lavanderi) | vat-orë |
+| Sub_metering_3 | Nën-matësi i energjisë Nr. 3 (kontrolli i klimës) | vat-orë |
 
-**Note**: Missing values are coded as `?`.
+**Shënim**: Vlerat që mungojnë janë të koduara si `?`.
 
-## Project Structure
+## Struktura e Projektit
 
-This project is divided into two phases:
+Ky projekt është i ndarë në dy faza:
 
-- **Phase 1 (Completed)**: Data preprocessing, cleaning, feature engineering, transformation, and feature selection
-- **Phase 2 (In Progress)**: Advanced outlier detection, false positive/negative analysis, and multivariate exploration
+- **Faza 1 (E Përfunduar)**: Parapërpunimi i të dhënave, pastrimi, inxhinieria e tipareve, transformimi dhe selektimi i tipareve
+- **Faza 2 (E Përfunduar)**: Detektimi i avancuar i vlerave të jashtëzakonshme (outliers), analiza e fals-pozitivëve/negativëve dhe eksplorimi shumëvariatesh
 
-## Setup
+## Konfigurimi
 
-### Requirements
+### Kërkesat
 
 - Python 3.7+
 - pandas
 - numpy
-- scikit-learn (for Phase 2)
+- scikit-learn (për Fazën 2)
 
-Install dependencies:
+Instaloni varësitë:
 ```bash
 pip install pandas numpy scikit-learn
 ```
 
-### Getting the Dataset
+### Marrja e Datasetit
 
-1. Download the dataset from [UCI ML Repository](https://archive.ics.uci.edu/ml/datasets/individual+household+electric+power+consumption)
-2. Extract `household_power_consumption.txt` to `data/raw/` directory
-3. The dataset files are excluded from git (see `.gitignore`)
+1. Shkarkoni datasetin nga [UCI ML Repository](https://archive.ics.uci.edu/ml/datasets/individual+household+electric+power+consumption)
+2. Ekstraktoni `household_power_consumption.txt` në direktorinë `data/raw/`
+3. Skedarët e datasetit janë të përjashtuar nga git (shiko `.gitignore`)
 
-## Phase 1: Data Preprocessing - Column Evolution
+## Faza 1: Parapërpunimi i Të Dhënave - Evolucioni i Kolonave
 
-This section documents how the dataset columns changed through each preprocessing step.
+Ky seksion dokumenton se si kanë ndryshuar kolonat e datasetit përmes çdo hapi të parapërpunimit.
 
-### Step 1: Sampling
-**Script**: `src/preprocessing/create_stratified_sample.py`
+### Hapi 1: Kampionimi
+**Skripta**: `src/preprocessing/create_stratified_sample.py`
 
-**Input**: `data/raw/household_power_consumption.txt` (2,075,259 rows × 9 columns)
-**Output**: `data/raw/household_power_consumption_sample.txt` (999,970 rows × 9 columns)
+**Hyrja**: `data/raw/household_power_consumption.txt` (2,075,259 rreshta × 9 kolona)
+**Dalja**: `data/raw/household_power_consumption_sample.txt` (999,970 rreshta × 9 kolona)
 
-**Columns**: No changes
+**Kolonat**: Asnjë ndryshim
 - Date, Time, Global_active_power, Global_reactive_power, Voltage, Global_intensity, Sub_metering_1, Sub_metering_2, Sub_metering_3
 
-**Result**: 48.2% of original data (stratified sampling)
+**Rezultati**: 48.2% e të dhënave origjinale (kampionim i shtresëzuar)
 
 ---
 
-### Step 2: Data Exploration
-**Script**: `src/preprocessing/data_exploration.py`
+### Hapi 2: Eksplorimi i Të Dhënave
+**Skripta**: `src/preprocessing/data_exploration.py`
 
-**Input**: `data/raw/household_power_consumption_sample.txt` (999,970 rows × 9 columns)
-**Output**: Reports only (read-only analysis)
+**Hyrja**: `data/raw/household_power_consumption_sample.txt` (999,970 rreshta × 9 kolona)
+**Dalja**: Vetëm raporte (analizë vetëm për lexim)
 
-**Columns**: No changes to dataset
-**Output Files**:
+**Kolonat**: Asnjë ndryshim në dataset
+**Skedarët Dalës**:
 - `reports/analysis/exploration_report.txt`
 - `reports/analysis/exploration_statistics.csv`
 - `reports/analysis/exploration_sample.csv`
 
-**Analysis**: Data types, summary statistics, value ranges, time period analysis
+**Analiza**: Tipet e të dhënave, statistikat përmbledhëse, rangjet e vlerave, analiza e periudhës kohore
 
 ---
 
-### Step 3: Data Quality Analysis
-**Script**: `src/preprocessing/data_quality_analysis.py`
+### Hapi 3: Analiza e Cilësisë së Të Dhënave
+**Skripta**: `src/preprocessing/data_quality_analysis.py`
 
-**Input**: `data/raw/household_power_consumption_sample.txt` (999,970 rows × 9 columns)
-**Output**: Reports only (read-only analysis)
+**Hyrja**: `data/raw/household_power_consumption_sample.txt` (999,970 rreshta × 9 kolona)
+**Dalja**: Vetëm raporte (analizë vetëm për lexim)
 
-**Columns**: No changes to dataset
-**Output Files**:
+**Kolonat**: Asnjë ndryshim në dataset
+**Skedarët Dalës**:
 - `reports/quality/quality_report.txt`
 - `reports/quality/quality_missing_values.csv`
 - `reports/quality/quality_outliers.csv`
 
-**Findings**:
-- Missing values: 87,731 (0.97%) - all 7 numeric columns affected simultaneously
-- Duplicates: 0
-- Outliers detected: 256,973 (25.7% using IQR method with 1.5×IQR)
+**Gjetjet**:
+- Vlera që mungojnë: 87,731 (0.97%) - të gjitha 7 kolonat numerike të prekura njëkohësisht
+- Dublikate: 0
+- Outliers të detektuar: 256,973 (25.7% duke përdorur metodën IQR me 1.5×IQR)
 
 ---
 
-### Step 4: Data Cleaning
-**Script**: `src/preprocessing/data_cleaning.py`
+### Hapi 4: Pastrimi i Të Dhënave
+**Skripta**: `src/preprocessing/data_cleaning.py`
 
-**Input**: `data/raw/household_power_consumption_sample.txt` (999,970 rows × 9 columns)
-**Output**: `data/processed/household_power_consumption_cleaned.csv` (891,357 rows × 10 columns)
+**Hyrja**: `data/raw/household_power_consumption_sample.txt` (999,970 rreshta × 9 kolona)
+**Dalja**: `data/processed/household_power_consumption_cleaned.csv` (891,357 rreshta × 10 kolona)
 
-**Column Changes**:
-- **Added**: `DateTime` (datetime) - Integration of Date and Time columns
-- **Removed**: None (Date and Time columns retained)
-- **Modified**: All numeric columns (missing values filled via time-based interpolation)
+**Ndryshimet në Kolona**:
+- **Shtuar**: `DateTime` (datetime) - Integrimi i kolonave Date dhe Time
+- **Larguar**: Asnjë (kolonat Date dhe Time u mbajtën)
+- **Modifikuar**: Të gjitha kolonat numerike (vlerat që mungojnë u mbushën përmes interpolimit kohor)
 
-**Operations**:
-1. Created `DateTime` column from Date + Time
-2. Filled 87,731 missing values using linear interpolation (time-based)
-3. Removed 108,613 outlier rows (10.86%) using IQR method (3×IQR threshold)
-4. Clipped negative values to 0
+**Operacionet**:
+1. U krijua kolona `DateTime` nga Date + Time
+2. U mbushën 87,731 vlera që mungojnë duke përdorur interpolimin linear (bazuar në kohë)
+3. U larguan 108,613 rreshta outlier (10.86%) duke përdorur metodën IQR (pragu 3×IQR)
+4. U kufizuan vlerat negative në 0
 
-**Final Columns** (10):
+**Kolonat Përfundimtare** (10):
 - DateTime, Date, Time
 - Global_active_power, Global_reactive_power, Voltage, Global_intensity
 - Sub_metering_1, Sub_metering_2, Sub_metering_3
 
-**Output Files**:
+**Skedarët Dalës**:
 - `data/processed/household_power_consumption_cleaned.csv`
 - `reports/quality/cleaning_report.txt`
 
 ---
 
-### Step 5: Feature Engineering
-**Script**: `src/preprocessing/feature_engineering.py`
+### Hapi 5: Inxhinieria e Tipareve
+**Skripta**: `src/preprocessing/feature_engineering.py`
 
-**Input**: `data/processed/household_power_consumption_cleaned.csv` (891,357 rows × 10 columns)
-**Output**: `data/processed/household_power_consumption_with_features.csv` (891,357 rows × 34 columns)
+**Hyrja**: `data/processed/household_power_consumption_cleaned.csv` (891,357 rreshta × 10 kolona)
+**Dalja**: `data/processed/household_power_consumption_with_features.csv` (891,357 rreshta × 34 kolona)
 
-**Column Changes**:
-- **Added**: 24 new features
-- **Removed**: None
+**Ndryshimet në Kolona**:
+- **Shtuar**: 24 tipare të reja
+- **Larguar**: Asnjë
 
-**New Features by Category**:
+**Tiparet e Reja sipas Kategorisë**:
 
-1. **Temporal Features** (9 columns):
-   - `Year` (int) - Year from DateTime
-   - `Month` (int) - Month (1-12)
-   - `Day` (int) - Day of month
-   - `Hour` (int) - Hour (0-23)
-   - `Minute` (int) - Minute (0-59)
-   - `DayOfWeek` (int) - Day of week (0=Monday, 6=Sunday)
-   - `DayName` (str) - Day name (Monday-Sunday)
-   - `MonthName` (str) - Month name (January-December)
-   - `WeekOfYear` (int) - Week number (1-53)
+1. **Tipare Kohore** (9 kolona):
+   - `Year` (int) - Viti nga DateTime
+   - `Month` (int) - Muaji (1-12)
+   - `Day` (int) - Dita e muajit
+   - `Hour` (int) - Ora (0-23)
+   - `Minute` (int) - Minuta (0-59)
+   - `DayOfWeek` (int) - Dita e javës (0=E Hënë, 6=E Diel)
+   - `DayName` (str) - Emri i ditës (Monday-Sunday)
+   - `MonthName` (str) - Emri i muajit (January-December)
+   - `WeekOfYear` (int) - Numri i javës (1-53)
 
-2. **Binary Features** (5 columns):
-   - `IsWeekend` (int) - 1 if Saturday/Sunday, 0 otherwise
-   - `IsNight` (int) - 1 if hour 22-5, 0 otherwise
-   - `IsMorning` (int) - 1 if hour 6-11, 0 otherwise
-   - `IsAfternoon` (int) - 1 if hour 12-17, 0 otherwise
-   - `IsEvening` (int) - 1 if hour 18-21, 0 otherwise
+2. **Tipare Binare** (5 kolona):
+   - `IsWeekend` (int) - 1 nëse E Shtunë/E Diel, 0 ndryshe
+   - `IsNight` (int) - 1 nëse ora 22-5, 0 ndryshe
+   - `IsMorning` (int) - 1 nëse ora 6-11, 0 ndryshe
+   - `IsAfternoon` (int) - 1 nëse ora 12-17, 0 ndryshe
+   - `IsEvening` (int) - 1 nëse ora 18-21, 0 ndryshe
 
-3. **Categorical Features** (2 columns):
+3. **Tipare Kategorike** (2 kolona):
    - `Season` (str) - Winter/Spring/Summer/Autumn
    - `TimeOfDay` (str) - Morning/Afternoon/Evening/Night
 
-4. **Calculated Features** (4 columns):
-   - `Sub_metering_4` (float) - Unmeasured energy (Global_active_power × 1000/60 - sum of Sub_metering_1,2,3)
-   - `Total_Sub_metering` (float) - Sum of all sub-metering values
-   - `Energy_per_minute` (float) - Global_active_power / 60 (kWh per minute)
+4. **Tipare të Llogaritura** (4 kolona):
+   - `Sub_metering_4` (float) - Energjia e pamatshme (Global_active_power × 1000/60 - shuma e Sub_metering_1,2,3)
+   - `Total_Sub_metering` (float) - Shuma e të gjitha vlerave të nën-matësve
+   - `Energy_per_minute` (float) - Global_active_power / 60 (kWh për minutë)
    - `Intensity_ratio` (float) - Global_intensity / (Voltage / 1000)
 
-5. **Statistical Features** (4 columns):
-   - `Power_1h_avg` (float) - Rolling average of Global_active_power (60 minutes window)
-   - `Power_24h_avg` (float) - Rolling average of Global_active_power (1440 minutes window)
-   - `Power_prev_1h` (float) - Lag feature: Global_active_power from 1 hour ago
-   - `Power_change_1h` (float) - Change in power from previous hour
+5. **Tipare Statistikore** (4 kolona):
+   - `Power_1h_avg` (float) - Mesatarja e lëvizshme e Global_active_power (dritare 60 minuta)
+   - `Power_24h_avg` (float) - Mesatarja e lëvizshme e Global_active_power (dritare 1440 minuta)
+   - `Power_prev_1h` (float) - Tipar i vonesës: Global_active_power nga 1 orë më parë
+   - `Power_change_1h` (float) - Ndryshimi në fuqi nga ora e kaluar
 
-**Final Columns** (34):
-- Original: DateTime, Date, Time, Global_active_power, Global_reactive_power, Voltage, Global_intensity, Sub_metering_1, Sub_metering_2, Sub_metering_3
-- New: Year, Month, Day, Hour, Minute, DayOfWeek, DayName, MonthName, WeekOfYear, IsWeekend, IsNight, IsMorning, IsAfternoon, IsEvening, Season, TimeOfDay, Sub_metering_4, Total_Sub_metering, Energy_per_minute, Intensity_ratio, Power_1h_avg, Power_24h_avg, Power_prev_1h, Power_change_1h
-
-**Output Files**:
+**Skedarët Dalës**:
 - `data/processed/household_power_consumption_with_features.csv`
 - `reports/analysis/features_report.txt`
 
 ---
 
-### Step 6: Data Aggregation
-**Script**: `src/preprocessing/data_aggregation.py`
+### Hapi 6: Agregimi i Të Dhënave
+**Skripta**: `src/preprocessing/data_aggregation.py`
 
-**Input**: `data/processed/household_power_consumption_with_features.csv` (891,357 rows × 34 columns)
-**Output**: 7 aggregated datasets (separate files)
+**Hyrja**: `data/processed/household_power_consumption_with_features.csv` (891,357 rreshta × 34 kolona)
+**Dalja**: 7 dataset-e të agreguara (skedarë të veçantë)
 
-**Column Changes**: Creates separate aggregated views (original dataset unchanged)
+**Ndryshimet në Kolona**: Krijon pamje të agreguara të veçanta (dataseti origjinal i pandryshuar)
 
-**Aggregated Datasets**:
-
-1. **aggregation_daily.csv**: Daily aggregates (mean, sum, min, max per day)
-2. **aggregation_hourly.csv**: Hourly aggregates (mean, sum per hour)
-3. **aggregation_weekly.csv**: Weekly aggregates (mean, sum per week)
-4. **aggregation_monthly.csv**: Monthly aggregates (mean, sum per month)
-5. **aggregation_seasonal.csv**: Seasonal aggregates (mean, sum per season)
-6. **aggregation_timeofday.csv**: Time of day aggregates (mean, sum by time period)
-7. **aggregation_hour_weekend.csv**: Hourly aggregates split by weekend/weekday
-
-**Output Files**:
-- `data/aggregated/aggregation_*.csv` (7 files)
+**Skedarët Dalës**:
+- `data/aggregated/aggregation_*.csv` (7 skedarë)
 - `reports/analysis/aggregation_report.txt`
 
 ---
 
-### Step 7: Data Transformation
-**Script**: `src/preprocessing/data_transformation.py`
+### Hapi 7: Transformimi i Të Dhënave
+**Skripta**: `src/preprocessing/data_transformation.py`
 
-**Input**: `data/processed/household_power_consumption_with_features.csv` (891,357 rows × 34 columns)
-**Output**: `data/processed/household_power_consumption_transformed.csv` (891,357 rows × 40 columns)
+**Hyrja**: `data/processed/household_power_consumption_with_features.csv` (891,357 rreshta × 34 kolona)
+**Dalja**: `data/processed/household_power_consumption_transformed.csv` (891,357 rreshta × 40 kolona)
 
-**Column Changes**:
-- **Added**: 6 new transformed columns
-- **Removed**: None
+**Ndryshimet në Kolona**:
+- **Shtuar**: 6 tipare të reja të transformuara
+- **Larguar**: Asnjë
 
-**New Transformed Features**:
+**Tiparet e Reja të Transformuara**:
 
-1. **Discretization** (2 columns):
-   - `Power_Level` (category) - 4 levels: Low, Medium, High, Very High
-     - Based on quartiles of Global_active_power
-   - `Voltage_Level` (category) - 5 levels: Very Low, Low, Normal, High, Very High
-     - Based on voltage ranges: <230V, 230-235V, 235-240V, 240-245V, >245V
+1. **Diskretizimi** (2 kolona):
+   - `Power_Level` (category) - 4 nivele: Low, Medium, High, Very High
+   - `Voltage_Level` (category) - 5 nivele: Very Low, Low, Normal, High, Very High
 
-2. **Binarization** (2 columns):
-   - `Is_High_Power` (int) - 1 if Global_active_power > median, 0 otherwise
-   - `Voltage_Normal_Binary` (int) - 1 if Voltage between 235-245V, 0 otherwise
+2. **Binarizimi** (2 kolona):
+   - `Is_High_Power` (int) - 1 nëse Global_active_power > mesataren, 0 ndryshe
+   - `Voltage_Normal_Binary` (int) - 1 nëse Voltage mes 235-245V, 0 ndryshe
 
-3. **Label Encoding** (2 columns):
+3. **Label Encoding** (2 kolona):
    - `Season_Encoded` (int) - 0=Winter, 1=Spring, 2=Summer, 3=Autumn
    - `TimeOfDay_Encoded` (int) - 0=Night, 1=Morning, 2=Afternoon, 3=Evening
 
-**Final Columns** (40):
-- All previous 34 columns +
-- Power_Level, Voltage_Level, Is_High_Power, Voltage_Normal_Binary, Season_Encoded, TimeOfDay_Encoded
-
-**Output Files**:
+**Skedarët Dalës**:
 - `data/processed/household_power_consumption_transformed.csv`
 - `reports/analysis/transformation_report.txt`
 
 ---
 
-### Step 8: Feature Selection
-**Script**: `src/preprocessing/feature_selection.py`
+### Hapi 8: Selektimi i Tipareve
+**Skripta**: `src/preprocessing/feature_selection.py`
 
-**Input**: `data/processed/household_power_consumption_transformed.csv` (891,357 rows × 40 columns)
-**Output**: `data/processed/household_power_consumption_final.csv` (891,357 rows × 33 columns)
+**Hyrja**: `data/processed/household_power_consumption_transformed.csv` (891,357 rreshta × 40 kolona)
+**Dalja**: `data/processed/household_power_consumption_final.csv` (891,357 rreshta × 33 kolona)
 
-**Column Changes**:
-- **Removed**: 8 redundant features (highly correlated, |r| > 0.7)
-- **Kept**: 33 features
+**Ndryshimet në Kolona**:
+- **Larguar**: 8 tipare të tepërta (korrelacion i lartë, |r| > 0.7)
+- **Mbajtur**: 33 tipare
 
-**Removed Features** (8):
-1. `Global_intensity` - Highly correlated with Global_active_power (r=0.999)
-2. `Intensity_ratio` - Highly correlated with Global_intensity (r=0.999)
-3. `IsEvening` - Highly correlated with TimeOfDay_Encoded (r=0.706)
-4. `Is_High_Power` - Highly correlated with Global_active_power (r=0.766)
-5. `Sub_metering_3` - Highly correlated with Total_Sub_metering (r=0.743)
-6. `Sub_metering_4` - Highly correlated with Energy_per_minute (r=0.783)
-7. `TimeOfDay_Encoded` - Highly correlated with IsNight (r=-0.817)
-8. `Total_Sub_metering` - Perfectly correlated with Energy_per_minute (r=1.000)
+**Tiparet e Larguara** (8):
+1. `Global_intensity`
+2. `Intensity_ratio`
+3. `IsEvening`
+4. `Is_High_Power`
+5. `Sub_metering_3`
+6. `Sub_metering_4`
+7. `TimeOfDay_Encoded`
+8. `Total_Sub_metering`
 
-**Final Columns** (33):
+**Kolonat Përfundimtare** (33):
 - **DateTime & Time**: DateTime, Date, Time
 - **Original Power**: Global_active_power, Global_reactive_power, Voltage
 - **Sub-metering**: Sub_metering_1, Sub_metering_2, Sub_metering_3, Sub_metering_4
@@ -302,366 +282,272 @@ This section documents how the dataset columns changed through each preprocessin
 - **Calculated**: Energy_per_minute
 - **Statistical**: Power_1h_avg, Power_24h_avg, Power_prev_1h, Power_change_1h
 
-**Note**: Some removed features (like Sub_metering_3, Sub_metering_4) are still in the final dataset as they were retained in the essential features list. The correlation analysis identified them as redundant but they were kept for domain relevance.
-
-**Output Files**:
+**Skedarët Dalës**:
 - `data/processed/household_power_consumption_final.csv`
 - `outputs/correlation_matrix.csv`
 - `reports/analysis/feature_selection_report.txt`
 
 ---
 
-## Phase 1 Summary
+## Përmbledhja e Fazës 1
 
-### Dataset Evolution
+### Evolucioni i Datasetit
 
-| Step | Rows | Columns | Key Changes |
-|------|------|---------|-------------|
-| **Original** | 2,075,259 | 9 | Raw data with missing values |
-| **After Sampling** | 999,970 | 9 | Stratified sample (48.2%) |
-| **After Cleaning** | 891,357 | 10 | +DateTime, -108K outliers, missing values filled |
-| **After Feature Engineering** | 891,357 | 34 | +24 new features |
-| **After Transformation** | 891,357 | 40 | +6 transformed features |
-| **Final** | 891,357 | 33 | -7 redundant features |
-
-### Key Metrics
-
-- **Data Retention**: 43% of original data (after sampling and cleaning)
-- **Missing Values**: 87,731 → 0 (100% fixed via interpolation)
-- **Outliers Removed**: 108,613 rows (10.86% of sample)
-- **Features Created**: 27 new features
-- **Features Removed**: 7 redundant features (high correlation)
-- **Final Dataset**: 891,357 rows × 33 columns
-
-### Output Files
-
-**Processed Data**:
-- `data/processed/household_power_consumption_cleaned.csv`
-- `data/processed/household_power_consumption_with_features.csv`
-- `data/processed/household_power_consumption_transformed.csv`
-- `data/processed/household_power_consumption_final.csv` ⭐
-
-**Aggregated Data** (7 files):
-- `data/aggregated/aggregation_daily.csv`
-- `data/aggregated/aggregation_hourly.csv`
-- `data/aggregated/aggregation_weekly.csv`
-- `data/aggregated/aggregation_monthly.csv`
-- `data/aggregated/aggregation_seasonal.csv`
-- `data/aggregated/aggregation_timeofday.csv`
-- `data/aggregated/aggregation_hour_weekend.csv`
-
-**Reports**:
-- `reports/analysis/exploration_report.txt`
-- `reports/quality/quality_report.txt`
-- `reports/quality/cleaning_report.txt`
-- `reports/analysis/features_report.txt`
-- `reports/analysis/aggregation_report.txt`
-- `reports/analysis/transformation_report.txt`
-- `reports/analysis/feature_selection_report.txt`
-
-**Analysis Outputs**:
-- `outputs/correlation_matrix.csv`
+| Hapi | Rreshtat | Kolonat | Ndryshimet Kryesore |
+|------|----------|---------|---------------------|
+| **Origjinali** | 2,075,259 | 9 | Të dhëna të papërpunuara me vlera që mungojnë |
+| **Pas Kampionimit** | 999,970 | 9 | Kampion i shtresëzuar (48.2%) |
+| **Pas Pastrimit** | 891,357 | 10 | +DateTime, -108K outliers, vlerat e munguara u rregulluan |
+| **Pas Inxhinierisë** | 891,357 | 34 | +24 tipare të reja |
+| **Pas Transformimit** | 891,357 | 40 | +6 tipare të transformuara |
+| **Përfundimtar** | 891,357 | 33 | -7 tipare të tepërta |
 
 ---
 
-## Phase 2: Advanced Outlier Detection and Multivariate Analysis
+## Faza 2: Detektimi i Avancuar i Vlerave të Jashtëzakonshme dhe Analiza Shumëvariatesh
 
-**Input**: `data/processed/household_power_consumption_cleaned.csv` (891,357 rows × 10 columns)  
-**Duration**: Implemented over 11 analytical steps
-
-### Overview
-
-Phase 2 implements rigorous outlier detection and multivariate analysis using multiple complementary methods. The analysis validates findings through method comparison and provides comprehensive statistical insights.
-
-### Methods Implemented
-
-#### 1. Outlier Detection (3 Methods)
-
-**1.1 Z-Score Method (Statistical, Univariate)**
-- **Script**: `src/analysis/outlier_zscore.py`
-- **Approach**: Measures standard deviations from mean
-- **Parameter Testing**: Thresholds 2.5, 3.0, 3.5
-- **Selected**: |Z| > 3.0 (99.7% rule)
-- **Results**: 31,098 outliers (3.49%)
-- **Outputs**:
-  - `outputs/phase2/outliers_zscore_flags.csv`
-  - `outputs/phase2/zscore_threshold_comparison.png`
-  - `reports/phase2/outlier_zscore_report.txt`
-
-**1.2 Isolation Forest (Machine Learning, Multivariate)**
-- **Script**: `src/analysis/outlier_isolation_forest.py`
-- **Approach**: Tree-based isolation of anomalies
-- **Parameter Testing**: Contamination 0.05, 0.10, 0.15
-- **Selected**: contamination = 0.05 (best score separation: 0.1769)
-- **Results**: 44,568 outliers (5.00%)
-- **Outputs**:
-  - `outputs/phase2/outliers_iforest_flags.csv`
-  - `outputs/phase2/iforest_contamination_comparison.png`
-  - `reports/phase2/outlier_iforest_report.txt`
-
-**1.3 LOF - Local Outlier Factor (Density-Based)**
-- **Script**: `src/analysis/outlier_lof.py`
-- **Approach**: Density-based local anomaly detection
-- **Parameter Testing**: n_neighbors 10, 20, 50
-- **Selected**: n_neighbors = 20 (balanced)
-- **Results**: 18,267 outliers (2.05%)
-- **Outputs**:
-  - `outputs/phase2/outliers_lof_flags.csv`
-  - `outputs/phase2/lof_neighbors_comparison.png`
-  - `reports/phase2/outlier_lof_report.txt`
-
-#### 2. Method Comparison
-
-**Script**: `src/analysis/outlier_comparison.py`
-
-**Results**:
-- Total unique outliers: 68,160
-- **Consensus (2+ methods agree)**: 24,553 (2.75%)
-- **High-confidence (all 3 agree)**: 1,220 (0.14%)
-
-**Key Finding**: Only 1,220 outliers detected by all three methods represent true high-confidence anomalies.
-
-**Outputs**:
-- `outputs/phase2/outlier_method_comparison.csv`
-- `outputs/phase2/outlier_method_venn.png` (Venn diagram)
-- `outputs/phase2/outlier_method_comparison.png`
-- `reports/phase2/outlier_method_comparison_report.txt`
-
-#### 3. Enhanced Statistical Analysis
-
-**Script**: `src/analysis/enhanced_statistics.py`
-
-**Metrics Calculated**:
-- Skewness (distribution asymmetry)
-- Kurtosis (tail heaviness)
-- 95% Confidence intervals
-- Percentiles (5th, 25th, 75th, 95th)
-- Coefficient of variation
-
-**Findings**:
-- All features show positive skewness (right-skewed)
-- Heavy-tailed distributions (positive kurtosis)
-- Expected for power consumption data (low baseline, occasional spikes)
-
-**Outputs**:
-- `outputs/phase2/enhanced_statistics.csv`
-- `outputs/phase2/enhanced_statistics_distributions.png`
-- `outputs/phase2/enhanced_statistics_summary.png`
-- `reports/phase2/enhanced_statistics_report.txt`
-
-#### 4. Distribution Analysis & Normality Testing
-
-**Script**: `src/analysis/distribution_analysis.py`
-
-**Tests Performed**:
-- Shapiro-Wilk test
-- Kolmogorov-Smirnov test
-- Q-Q plots (visual normality check)
-
-**Result**: Only 1 out of 7 features is normally distributed
-
-**Implication**: Validates use of methods that don't assume normality (Isolation Forest, LOF)
-
-**Outputs**:
-- `outputs/phase2/normality_tests.csv`
-- `outputs/phase2/qq_plots.png`
-- `outputs/phase2/distribution_vs_normal.png`
-- `outputs/phase2/kde_plots.png`
-- `reports/phase2/distribution_analysis_report.txt`
-
-#### 5. Correlation Analysis
-
-**Script**: `src/analysis/correlation_analysis.py`
-
-**Strong Correlations Identified**:
-- Global_active_power ↔ Global_intensity: **r = 0.999** (mathematically related)
-- Global_active_power ↔ Sub_metering_3: **r = 0.743** (water heater/AC)
-- Voltage ↔ Power: **r = -0.310** (voltage drops under load)
-
-**Outputs**:
-- `outputs/phase2/correlation_matrix.csv`
-- `outputs/phase2/covariance_matrix.csv`
-- `outputs/phase2/strong_correlations.csv`
-- `outputs/phase2/correlation_heatmap.png`
-- `outputs/phase2/covariance_heatmap.png`
-- `reports/phase2/correlation_analysis_report.txt`
-
-#### 6. Principal Component Analysis (PCA)
-
-**Script**: `src/analysis/pca_analysis.py`
-
-**Results**:
-- **PC1**: 47.46% variance
-- **PC2**: 23.02% variance
-- **PC1 + PC2**: 70.48% cumulative variance
-- Components for 95% variance: 5
-
-**Interpretation**:
-- Successful dimensionality reduction (6 features → 2 components)
-- 70% variance retained in 2D representation
-- Enables visualization with minimal information loss
-
-**Outputs**:
-- `outputs/phase2/pca_components.csv`
-- `outputs/phase2/pca_loadings.csv`
-- `outputs/phase2/pca_variance.csv`
-- `outputs/phase2/pca_scree_plot.png`
-- `outputs/phase2/pca_scatter.png`
-- `outputs/phase2/pca_component_loadings.png`
-- `reports/phase2/pca_analysis_report.txt`
-
-### Execution Instructions
-
-To run Phase 2 analysis:
-
-```bash
-# 1. Install required libraries
-pip install -r requirements.txt
-
-# 2. Navigate to analysis directory
-cd src/analysis
-
-# 3. Run individual analyses (in order)
-python outlier_zscore.py
-python outlier_isolation_forest.py
-python outlier_lof.py
-python outlier_comparison.py
-python enhanced_statistics.py
-python distribution_analysis.py
-python correlation_analysis.py
-python pca_analysis.py
-```
-
-### Key Findings
-
-1. **Outlier Detection**:
-   - Three methods provide complementary perspectives
-   - Consensus approach recommended (24,553 outliers with 2+ methods)
-   - 1,220 high-confidence outliers (all 3 methods agree)
-
-2. **Data Characteristics**:
-   - Non-normal distributions across all features
-   - Right-skewed with heavy tails (expected for consumption data)
-   - Strong correlations between power-related features
-
-3. **Dimensionality Reduction**:
-   - PCA successfully reduced 6 features to 2 components
-   - 70% variance retained in 2D representation
-   - Feature redundancy confirmed (0.999 correlation)
-
-### Deliverables
-
-**Total Outputs**: 30+ files
-- **CSV Files**: 15 (outlier flags, statistics, PCA components)
-- **Visualizations**: 20 PNG images (heatmaps, plots, comparisons)
-- **Reports**: 8 detailed analysis reports
-- **Summary**: `reports/phase2/PHASE2_SUMMARY_REPORT.txt`
-
-See `docs/EXECUTION_GUIDE.md` for detailed execution instructions.
+**Statusi**: ✅ E Përfunduar  
+**Dataseti Hyrës**: `data/processed/household_power_consumption_cleaned.csv` (891,357 rreshta × 10 kolona)  
+**Objektivi**: Detektimi i anomalive duke përdorur metoda të shumëfishta (Z-Score, Isolation Forest, LOF) dhe kryerja e analizës shumëvariatesh për të kuptuar strukturën e të dhënave.
 
 ---
 
-## Project Execution
+### Hapi 3: Detektimi i Outliers me Z-Score
+**Skripta**: `src/analysis/outlier_zscore.py`
 
-### Complete Execution Guide
+**Të Dhënat Hyrëse**: 
+- 7 tipare numerike (Global_active_power, Global_reactive_power, Voltage, Global_intensity, Sub_metering_1, 2, 3).
+- Shpërndarja e të dhënave është e anuar djathtas (right-skewed).
 
-For detailed step-by-step instructions on how to execute this entire project from start to finish, please refer to:
+**Procesi**: 
+- Llogaritja e Z-scores për secilin tipar ($Z = \frac{x - \mu}{\sigma}$).
+- Eksperimentimi me pragun $\sigma = 2.5, 3.0, 3.5$.
+- U zgjodh **pragu 3.0** bazuar në rregullin statistikor 99.7%.
+
+**Rezultatet**:
+- **31,098 outliers të detektuar** (3.49% e të dhënave).
+- U gjeneruan flamuj boolean në `outliers_zscore_flags.csv`.
+
+**Vizualizimi**:  
+<img src="../outputs/phase2/zscore_threshold_comparison.png" width="600" alt="Z-Score Threshold Comparison">
+
+---
+
+### Hapi 4: Detektimi i Outliers me Isolation Forest
+**Skripta**: `src/analysis/outlier_isolation_forest.py`
+
+**Të Dhënat Hyrëse**: 
+- Të njëjtat 7 tipare numerike.
+- Analiza kërkon trajtimin e shpërndarjeve jo-normale dhe marrëdhënieve shumëvariatesh.
+
+**Procesi**: 
+- Aplikimi i Isolation Forest (metodë e ensemble learning).
+- Testimi i parametrave të 'contamination': $0.05, 0.10, 0.15$.
+- U zgjodh **contamination = 0.05** për shkak të ndarjes më të mirë të pikëve të anomalisë (0.1769).
+
+**Rezultatet**:
+- **44,568 outliers të detektuar** (5.00% e të dhënave).
+- U detektuan 13,470 outliers unikë që Z-Score nuk i kapi (shable komplekse shumëvariatesh).
+
+**Vizualizimi**:  
+<img src="../outputs/phase2/iforest_contamination_comparison.png" width="600" alt="Isolation Forest Comparison">
+
+---
+
+### Hapi 5: LOF (Local Outlier Factor)
+**Skripta**: `src/analysis/outlier_lof.py`
+
+**Të Dhënat Hyrëse**: 
+- Fokus në variacionet e densitetit lokal në vend të ekstremeve globale.
+- Hap intensiv kompjuterik që kërkon parametra të optimizuar.
+
+**Procesi**: 
+- Aplikimi i LOF për të detektuar anomali të bazuara në densitet.
+- Testimi i fqinjëve $k = 10, 20, 50$.
+- U zgjodh **$k=20$** si parametri i balancuar për kontekstin lokal.
+
+**Rezultatet**:
+- **18,267 outliers të detektuar** (2.05% e të dhënave).
+- Shënon pikat në rajone lokale të rralla që metodat e tjera i humbasin.
+
+**Vizualizimi**:  
+<img src="../outputs/phase2/lof_neighbors_comparison.png" width="600" alt="LOF Neighbors Comparison">
+
+---
+
+### Hapi 6: Krahasimi i Metodave & Konsensusi
+**Skripta**: `src/analysis/outlier_comparison.py`
+
+**Të Dhënat Hyrëse**: 
+- Flamujt e outliers nga hapat Z-Score, Isolation Forest, dhe LOF.
+
+**Procesi**: 
+- Krijimi i një diagrami Venn për të vizualizuar mbivendosjen.
+- Llogaritja e pikëve të konsensusit (sa metoda pajtohen për një pikë).
+
+**Rezultatet**:
+- **1,220 outliers me besueshmëri të lartë** të detektuar nga TË 3 metodat (0.14%).
+- **24,553 outliers konsensusi** të detektuar nga 2+ metoda (2.75%).
+- Ofron një set robust të outliers për shënjim.
+
+**Vizualizimet**:  
+<img src="../outputs/phase2/outlier_method_venn.png" width="600" alt="Method Overlap Venn Diagram">  
+<img src="../outputs/phase2/outlier_method_comparison.png" width="600" alt="Method Comparison Charts">
+
+---
+
+### Hapi 7: Analiza e Avancuar Statistikore
+**Skripta**: `src/analysis/enhanced_statistics.py`
+
+**Hyrja**: 
+- Dataseti i pastruar (891,357 rreshta).
+
+**Procesi**: 
+- Llogaritja e Skewness, Kurtosis, Variancës, dhe Intervaleve të Besimit (95%).
+- Analiza e perqindëshve (percentiles) të 5-të, 25-të, 75-të, dhe 95-të.
+
+**Rezultatet**:
+- Konfirmoi që të gjitha tiparet janë **të anuara djathtas** (Positive Skewness).
+- Konfirmoi **bishta të rëndë** (Positive Kurtosis), duke validuar prezencën e outliers.
+
+**Vizualizimi**:  
+<img src="../outputs/phase2/enhanced_statistics_summary.png" width="600" alt="Enhanced Statistics Summary">
+
+---
+
+### Hapi 8: Analiza e Shpërndarjes & Testet e Normalitetit
+**Skripta**: `src/analysis/distribution_analysis.py`
+
+**Hyrja**: 
+- Shpërndarjet e tipareve kërkojnë testim formal të normalitetit për të validuar supozimet e metodave.
+
+**Procesi**: 
+- Kryerja e testeve **Shapiro-Wilk** dhe **Kolmogorov-Smirnov**.
+- Gjenerimi i grafikëve Q-Q dhe KDE (Kernel Density Estimation).
+
+**Rezultatet**:
+- **Vetëm 1 nga 7 tipare** kaloi testin e normalitetit.
+- Validon përdorimin e Isolation Forest dhe LOF (që nuk supozojnë normalitet) ndaj metodave thjesht parametrike.
+
+**Vizualizimi**:  
+<img src="../outputs/phase2/qq_plots.png" width="600" alt="Q-Q Plots">
+
+---
+
+### Hapi 9: Analiza e Korrelacionit
+**Skripta**: `src/analysis/correlation_analysis.py`
+
+**Hyrja**: 
+- 7 tipare numerike me redundancë potenciale.
+
+**Procesi**: 
+- Llogaritja e Matricës së Korrelacionit Pearson.
+- Identifikimi i korrelacioneve të forta ($|r| \ge 0.7$).
+
+**Rezultatet**:
+- U gjet **korrelacion 0.999** mes `Global_active_power` dhe `Global_intensity` (Konsistente matematikisht).
+- U identifikua redundanca duke justifikuar reduktimin e dimensionalitetit.
+
+**Vizualizimi**:  
+<img src="../outputs/phase2/correlation_heatmap.png" width="600" alt="Correlation Heatmap">
+
+---
+
+### Hapi 10: Analiza e Komponentëve Kryesorë (PCA)
+**Skripta**: `src/analysis/pca_analysis.py`
+
+**Hyrja**: 
+- Të dhëna me dimensionalitet të lartë (7 tipare) me redundancë të konfirmuar.
+
+**Procesi**: 
+- Standardizimi i të dhënave (Mesatarja=0, Devijimi Std=1).
+- Aplikimi i PCA për të projektuar të dhënat në hapësirë me dimensione më të ulëta.
+- Analiza e Raportit të Variancës së Shpjeguar.
+
+**Rezultatet**:
+- **PC1 (47%) + PC2 (23%)** shpjegojnë **70% të variancës totale**.
+- U reduktuan 7 dimensione në 2 për vizualizim me humbje minimale të informacionit.
+
+**Vizualizimet**:  
+<img src="../outputs/phase2/pca_scree_plot.png" width="600" alt="PCA Scree Plot">  
+<img src="../outputs/phase2/pca_scatter.png" width="600" alt="PCA Scatter Plot 2D">
+
+---
+
+### Dorëzimet Kryesore të Fazës 2
+- **Raporti Përmbledhës**: `reports/phase2/PHASE2_SUMMARY_REPORT.txt`
+- **Udhëzuesi i Mbrojtjes**: `docs/PHASE2_DEFENSE_GUIDE.md`
+- **Skedarët Dalës**: `outputs/phase2/` (30+ skedarë përfshirë CSV dhe PNG)
+
+---
+
+## Ekzekutimi i Projektit
+
+### Udhëzuesi i Plotë i Ekzekutimit
+
+Për udhëzime të detajuara hap-pas-hapi se si të ekzekutoni këtë projekt të plotë nga fillimi në fund, ju lutemi referojuni:
 
 **[EXECUTION_GUIDE.md](EXECUTION_GUIDE.md)**
 
-The execution guide provides comprehensive instructions for all 8 processing steps with detailed explanations of inputs,
-outputs, and results.
+### Fillimi i Shpejtë
 
-### Quick Start
+Për të ekzekutuar tubacionin e plotë të përpunimit të të dhënave:
 
-To execute the complete data processing pipeline:
-
-1. **Prerequisites:**
+1. **Parakushtet:**
    ```bash
-   pip install pandas numpy
+   pip install pandas numpy scikit-learn
    ```
 
-2. **Navigate to preprocessing directory:**
+2. **Navigoni te direktoria preprocessing (për Fazën 1) ose analysis (për Fazën 2):**
    ```bash
    cd src/preprocessing
    ```
 
-3. **Execute all 8 steps in sequence:**
+3. **Ekzekutoni skriptat sipas radhës (Faza 1):**
    ```bash
-   python create_stratified_sample.py      # Step 1: Sampling
-   python data_exploration.py              # Step 2: Exploration
-   python data_quality_analysis.py         # Step 3: Quality Analysis
-   python data_cleaning.py                 # Step 4: Data Cleaning
-   python feature_engineering.py           # Step 5: Feature Engineering
-   python data_aggregation.py              # Step 6: Data Aggregation
-   python data_transformation.py           # Step 7: Data Transformation
-   python feature_selection.py             # Step 8: Feature Selection
+   python create_stratified_sample.py
+   python data_exploration.py
+   python data_quality_analysis.py
+   python data_cleaning.py
+   python feature_engineering.py
+   python data_aggregation.py
+   python data_transformation.py
+   python feature_selection.py
    ```
 
-### Pipeline Overview
+4. **Ekzekutoni skriptat sipas radhës (Faza 2):**
+   ```bash
+   cd ../analysis
+   python outlier_zscore.py
+   python outlier_isolation_forest.py
+   python outlier_lof.py
+   python outlier_comparison.py
+   python enhanced_statistics.py
+   python distribution_analysis.py
+   python correlation_analysis.py
+   python pca_analysis.py
+   ```
 
-The execution pipeline transforms the data through these stages:
-
-```
-Original Dataset (2M rows, 127 MB)
-    ↓ [Sampling]
-Sample Dataset (1M rows, 50 MB)
-    ↓ [Cleaning]
-Cleaned Dataset (891K rows, 10 columns)
-    ↓ [Feature Engineering]
-Featured Dataset (891K rows, 37 columns)
-    ↓ [Transformation & Selection]
-Final Dataset (891K rows, ~35-40 columns)
-```
-
-### Expected Results
-
-After complete execution, you will have:
-
-- **5 main datasets** in `data/processed/`
-- **7 aggregated views** in `data/aggregated/`
-- **8 detailed reports** in `reports/`
-- **Correlation matrix** in `outputs/`
-
-**Total processing time:** ~5-10 minutes
-
-**Important:** Always refer to the [EXECUTION_GUIDE.md](EXECUTION_GUIDE.md) for detailed instructions, troubleshooting,
-and verification steps.
-
-## File Structure
+## Struktura e Skedarëve
 
 ```
 │
-├── src/preprocessing/          ← All scripts
-│   ├── create_stratified_sample.py
-│   ├── data_exploration.py
-│   ├── data_quality_analysis.py
-│   ├── data_cleaning.py
-│   ├── feature_engineering.py
-│   ├── data_aggregation.py
-│   ├── data_transformation.py
-│   └── feature_selection.py
-│
+├── src/preprocessing/          ← Skriptat e Fazës 1
+├── src/analysis/               ← Skriptat e Fazës 2
 ├── data/
-│   ├── raw/                    ← Original dataset & sample
-│   ├── processed/              ← Cleaned, featured, transformed, final
-│   └── aggregated/             ← 7 aggregations
+│   ├── raw/                    ← Dataseti origjinal & kampioni
+│   ├── processed/              ← Të pastruara, me tipare, finale
+│   └── aggregated/             ← 7 agregime
 │
 ├── reports/
-│   ├── analysis/               ← Exploration, features, aggregation, etc.
-│   └── quality/                ← Quality, cleaning reports
+│   ├── analysis/               ← Raportet e Fazës 1
+│   ├── phase2/                 ← Raportet e Fazës 2
+│   └── quality/                ← Raportet e cilësisë
 │
-├── outputs/                    ← Correlation matrix, figures
-└── docs/                       ← README, guides
+├── outputs/                    ← Matricat, grafikët, vizualizimet
+└── docs/                       ← README, udhëzuesit
 ```
 
-## Notes
-
-- Large data files (`.txt`, `.csv`) are excluded from version control
-- Use the sample dataset for development to avoid memory issues
-- The original dataset is semicolon-delimited with `?` for missing values
-- DateTime parsing available when using pandas in `convert_to_csv.py`
-
-## Citation
+## Citimi
 
 Dua, D. and Graff, C. (2019). UCI Machine Learning Repository [http://archive.ics.uci.edu/ml]. Irvine, CA: University of California, School of Information and Computer Science.
