@@ -366,13 +366,196 @@ This section documents how the dataset columns changed through each preprocessin
 
 ## Phase 2: Advanced Outlier Detection and Multivariate Analysis
 
-Phase 2 focuses on:
-- Advanced outlier detection methods (Z-score, Isolation Forest, LOF, Mahalanobis distance)
-- Comparison of outlier detection methods
-- False positive/negative analysis
-- Multivariate statistical analysis
-- Enhanced summary statistics
-- Principal Component Analysis (PCA)
+**Input**: `data/processed/household_power_consumption_cleaned.csv` (891,357 rows × 10 columns)  
+**Duration**: Implemented over 11 analytical steps
+
+### Overview
+
+Phase 2 implements rigorous outlier detection and multivariate analysis using multiple complementary methods. The analysis validates findings through method comparison and provides comprehensive statistical insights.
+
+### Methods Implemented
+
+#### 1. Outlier Detection (3 Methods)
+
+**1.1 Z-Score Method (Statistical, Univariate)**
+- **Script**: `src/analysis/outlier_zscore.py`
+- **Approach**: Measures standard deviations from mean
+- **Parameter Testing**: Thresholds 2.5, 3.0, 3.5
+- **Selected**: |Z| > 3.0 (99.7% rule)
+- **Results**: 31,098 outliers (3.49%)
+- **Outputs**:
+  - `outputs/phase2/outliers_zscore_flags.csv`
+  - `outputs/phase2/zscore_threshold_comparison.png`
+  - `reports/phase2/outlier_zscore_report.txt`
+
+**1.2 Isolation Forest (Machine Learning, Multivariate)**
+- **Script**: `src/analysis/outlier_isolation_forest.py`
+- **Approach**: Tree-based isolation of anomalies
+- **Parameter Testing**: Contamination 0.05, 0.10, 0.15
+- **Selected**: contamination = 0.05 (best score separation: 0.1769)
+- **Results**: 44,568 outliers (5.00%)
+- **Outputs**:
+  - `outputs/phase2/outliers_iforest_flags.csv`
+  - `outputs/phase2/iforest_contamination_comparison.png`
+  - `reports/phase2/outlier_iforest_report.txt`
+
+**1.3 LOF - Local Outlier Factor (Density-Based)**
+- **Script**: `src/analysis/outlier_lof.py`
+- **Approach**: Density-based local anomaly detection
+- **Parameter Testing**: n_neighbors 10, 20, 50
+- **Selected**: n_neighbors = 20 (balanced)
+- **Results**: 18,267 outliers (2.05%)
+- **Outputs**:
+  - `outputs/phase2/outliers_lof_flags.csv`
+  - `outputs/phase2/lof_neighbors_comparison.png`
+  - `reports/phase2/outlier_lof_report.txt`
+
+#### 2. Method Comparison
+
+**Script**: `src/analysis/outlier_comparison.py`
+
+**Results**:
+- Total unique outliers: 68,160
+- **Consensus (2+ methods agree)**: 24,553 (2.75%)
+- **High-confidence (all 3 agree)**: 1,220 (0.14%)
+
+**Key Finding**: Only 1,220 outliers detected by all three methods represent true high-confidence anomalies.
+
+**Outputs**:
+- `outputs/phase2/outlier_method_comparison.csv`
+- `outputs/phase2/outlier_method_venn.png` (Venn diagram)
+- `outputs/phase2/outlier_method_comparison.png`
+- `reports/phase2/outlier_method_comparison_report.txt`
+
+#### 3. Enhanced Statistical Analysis
+
+**Script**: `src/analysis/enhanced_statistics.py`
+
+**Metrics Calculated**:
+- Skewness (distribution asymmetry)
+- Kurtosis (tail heaviness)
+- 95% Confidence intervals
+- Percentiles (5th, 25th, 75th, 95th)
+- Coefficient of variation
+
+**Findings**:
+- All features show positive skewness (right-skewed)
+- Heavy-tailed distributions (positive kurtosis)
+- Expected for power consumption data (low baseline, occasional spikes)
+
+**Outputs**:
+- `outputs/phase2/enhanced_statistics.csv`
+- `outputs/phase2/enhanced_statistics_distributions.png`
+- `outputs/phase2/enhanced_statistics_summary.png`
+- `reports/phase2/enhanced_statistics_report.txt`
+
+#### 4. Distribution Analysis & Normality Testing
+
+**Script**: `src/analysis/distribution_analysis.py`
+
+**Tests Performed**:
+- Shapiro-Wilk test
+- Kolmogorov-Smirnov test
+- Q-Q plots (visual normality check)
+
+**Result**: Only 1 out of 7 features is normally distributed
+
+**Implication**: Validates use of methods that don't assume normality (Isolation Forest, LOF)
+
+**Outputs**:
+- `outputs/phase2/normality_tests.csv`
+- `outputs/phase2/qq_plots.png`
+- `outputs/phase2/distribution_vs_normal.png`
+- `outputs/phase2/kde_plots.png`
+- `reports/phase2/distribution_analysis_report.txt`
+
+#### 5. Correlation Analysis
+
+**Script**: `src/analysis/correlation_analysis.py`
+
+**Strong Correlations Identified**:
+- Global_active_power ↔ Global_intensity: **r = 0.999** (mathematically related)
+- Global_active_power ↔ Sub_metering_3: **r = 0.743** (water heater/AC)
+- Voltage ↔ Power: **r = -0.310** (voltage drops under load)
+
+**Outputs**:
+- `outputs/phase2/correlation_matrix.csv`
+- `outputs/phase2/covariance_matrix.csv`
+- `outputs/phase2/strong_correlations.csv`
+- `outputs/phase2/correlation_heatmap.png`
+- `outputs/phase2/covariance_heatmap.png`
+- `reports/phase2/correlation_analysis_report.txt`
+
+#### 6. Principal Component Analysis (PCA)
+
+**Script**: `src/analysis/pca_analysis.py`
+
+**Results**:
+- **PC1**: 47.46% variance
+- **PC2**: 23.02% variance
+- **PC1 + PC2**: 70.48% cumulative variance
+- Components for 95% variance: 5
+
+**Interpretation**:
+- Successful dimensionality reduction (6 features → 2 components)
+- 70% variance retained in 2D representation
+- Enables visualization with minimal information loss
+
+**Outputs**:
+- `outputs/phase2/pca_components.csv`
+- `outputs/phase2/pca_loadings.csv`
+- `outputs/phase2/pca_variance.csv`
+- `outputs/phase2/pca_scree_plot.png`
+- `outputs/phase2/pca_scatter.png`
+- `outputs/phase2/pca_component_loadings.png`
+- `reports/phase2/pca_analysis_report.txt`
+
+### Execution Instructions
+
+To run Phase 2 analysis:
+
+```bash
+# 1. Install required libraries
+pip install -r requirements.txt
+
+# 2. Navigate to analysis directory
+cd src/analysis
+
+# 3. Run individual analyses (in order)
+python outlier_zscore.py
+python outlier_isolation_forest.py
+python outlier_lof.py
+python outlier_comparison.py
+python enhanced_statistics.py
+python distribution_analysis.py
+python correlation_analysis.py
+python pca_analysis.py
+```
+
+### Key Findings
+
+1. **Outlier Detection**:
+   - Three methods provide complementary perspectives
+   - Consensus approach recommended (24,553 outliers with 2+ methods)
+   - 1,220 high-confidence outliers (all 3 methods agree)
+
+2. **Data Characteristics**:
+   - Non-normal distributions across all features
+   - Right-skewed with heavy tails (expected for consumption data)
+   - Strong correlations between power-related features
+
+3. **Dimensionality Reduction**:
+   - PCA successfully reduced 6 features to 2 components
+   - 70% variance retained in 2D representation
+   - Feature redundancy confirmed (0.999 correlation)
+
+### Deliverables
+
+**Total Outputs**: 30+ files
+- **CSV Files**: 15 (outlier flags, statistics, PCA components)
+- **Visualizations**: 20 PNG images (heatmaps, plots, comparisons)
+- **Reports**: 8 detailed analysis reports
+- **Summary**: `reports/phase2/PHASE2_SUMMARY_REPORT.txt`
 
 See `docs/EXECUTION_GUIDE.md` for detailed execution instructions.
 
