@@ -474,15 +474,6 @@ Ky seksion dokumenton se si kanë ndryshuar kolonat e datasetit përmes çdo hap
 
 ---
 
----
-
-### Dorëzimet Kryesore të Fazës 2
-- **Raporti Përmbledhës**: `reports/phase2/PHASE2_SUMMARY_REPORT.txt`
-- **Udhëzuesi i Mbrojtjes**: `docs/PHASE2_DEFENSE_GUIDE.md`
-- **Folderat Dalës**: `outputs/phase2/` (30+ skedarë përfshirë CSV dhe PNG)
-
----
-
 ### Hapi 17: Eliminimi i Outliers
 **Skripta**: `src/analysis/remove_outliers.py`
 
@@ -571,6 +562,18 @@ Për të ekzekutuar tubacionin e plotë të përpunimit të të dhënave:
 ├── outputs/                    ← Matricat, grafikët, vizualizimet
 └── docs/                       ← README, udhëzuesit
 ```
+
+## Përmbledhje e Pipeline-it të Përgatitjes së Të Dhënave
+
+| Hapi | Input | Output Dataset | Rreshta | Kolona | Transformimi Kryesor |
+|------|-------|----------------|---------|--------|----------------------|
+| **0. Burimet** | `household_power_consumption.txt` | - | 2,075,259 | 9 | Të dhëna bruto me vlera `?` |
+| **1. Kampionimi** | Raw Data | `..._sample.txt` | 999,970 | 9 | 48% Stratified Sample |
+| **4. Pastrimi** | Sample | `..._cleaned.csv` | 891,357 | 10 | Imputim linear, -108k outliers (IQR), +DateTime |
+| **5. Inxhinieria** | Cleaned | `..._with_features.csv` | 891,357 | 34 | +24 tipare (kohore, statistikore, logjike) |
+| **7. Transformimi** | Featured | `..._transformed.csv` | 891,357 | 40 | +6 tipare (diskretizim, binarizim, encoding) |
+| **8. Selektimi** | Transformed | `..._final.csv` (Faza 1) | 891,357 | 33 | -7 tipare redundante/korrelacion i lartë |
+| **17. Outliers** | Final (F1) | `..._phase2_clean.csv` (Faza 2) | **866,804** | 33 | **-24,553 konsensus outliers** (2+ metoda) |
 
 ## Citimi
 
