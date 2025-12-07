@@ -476,6 +476,35 @@ Ky seksion dokumenton se si kanë ndryshuar kolonat e datasetit përmes çdo hap
 
 ---
 
+### Dorëzimet Kryesore të Fazës 2
+- **Raporti Përmbledhës**: `reports/phase2/PHASE2_SUMMARY_REPORT.txt`
+- **Udhëzuesi i Mbrojtjes**: `docs/PHASE2_DEFENSE_GUIDE.md`
+- **Folderat Dalës**: `outputs/phase2/` (30+ skedarë përfshirë CSV dhe PNG)
+
+---
+
+### Hapi 17: Eliminimi i Outliers
+**Skripta**: `src/analysis/remove_outliers.py`
+
+**Arsyetimi**: 
+- Siç kërkohet nga "Mënjanimi i zbulimeve jo të sakta", ne kemi eliminuar vetëm outliers ku të paktën 2 nga 3 metodat kanë rënë dakord (Konsensusi).
+- Kjo siguron që po largojmë vetëm anomalitë e vërteta dhe jo variacionet normale të të dhënave.
+
+**Procesi**: 
+- Hyrja: Rezultatet e konsensusit nga Hapi 12.
+- Filtrimi: Largimi i rreshtave ku `outlier_consensus == True`.
+
+**Rezultatet**:
+- **24,553 outliers u eliminuan** (2.75% e datasetit).
+- Dataseti u pastrua nga 891,357 në **866,804 rreshta**.
+- Krijuar dataseti final i pastër për Fazën 3 (Vizualizimi).
+
+**Folderat Dalës**:
+- `data/processed/household_power_consumption_phase2_clean.csv`
+- `reports/phase2/outlier_removal_report.txt`
+
+---
+
 ## Ekzekutimi i Projektit
 
 ### Udhëzuesi i Plotë i Ekzekutimit

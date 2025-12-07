@@ -1,0 +1,11 @@
+OUTLIER REMOVAL REPORT
+======================
+
+Original Row Count: 891,357
+Outliers Removed:   24,553 (Consensus > 1 method)
+Final Row Count:    866,804
+Percentage Removed: 2.75%
+
+Rationale:
+Removed rows identified as outliers by at least 2 out of 3 methods (Z-Score, Isolation Forest, LOF).
+Single-method outliers were kept as potentially valid extreme values (false positives elimination).
