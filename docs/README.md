@@ -72,7 +72,7 @@ pip install pandas numpy scikit-learn
 
 1. Shkarkoni datasetin nga [UCI ML Repository](https://archive.ics.uci.edu/ml/datasets/individual+household+electric+power+consumption)
 2. Ekstraktoni `household_power_consumption.txt` në direktorinë `data/raw/`
-3. Skedarët e datasetit janë të përjashtuar nga git (shiko `.gitignore`)
+3. Filet e datasetit janë të përjashtuar nga git (shiko `.gitignore`)
 
 ## Faza 1: Parapërpunimi i Të Dhënave - Evolucioni i Kolonave
 
@@ -98,7 +98,7 @@ Ky seksion dokumenton se si kanë ndryshuar kolonat e datasetit përmes çdo hap
 **Dalja**: Vetëm raporte (analizë vetëm për lexim)
 
 **Kolonat**: Asnjë ndryshim në dataset
-**Skedarët Dalës**:
+**Files Dalës**:
 - `reports/analysis/exploration_report.txt`
 - `reports/analysis/exploration_statistics.csv`
 - `reports/analysis/exploration_sample.csv`
@@ -114,7 +114,7 @@ Ky seksion dokumenton se si kanë ndryshuar kolonat e datasetit përmes çdo hap
 **Dalja**: Vetëm raporte (analizë vetëm për lexim)
 
 **Kolonat**: Asnjë ndryshim në dataset
-**Skedarët Dalës**:
+**Files Dalës**:
 - `reports/quality/quality_report.txt`
 - `reports/quality/quality_missing_values.csv`
 - `reports/quality/quality_outliers.csv`
@@ -148,7 +148,7 @@ Ky seksion dokumenton se si kanë ndryshuar kolonat e datasetit përmes çdo hap
 - Global_active_power, Global_reactive_power, Voltage, Global_intensity
 - Sub_metering_1, Sub_metering_2, Sub_metering_3
 
-**Skedarët Dalës**:
+**Files Dalës**:
 - `data/processed/household_power_consumption_cleaned.csv`
 - `reports/quality/cleaning_report.txt`
 
@@ -200,7 +200,7 @@ Ky seksion dokumenton se si kanë ndryshuar kolonat e datasetit përmes çdo hap
    - `Power_prev_1h` (float) - Tipar i vonesës: Global_active_power nga 1 orë më parë
    - `Power_change_1h` (float) - Ndryshimi në fuqi nga ora e kaluar
 
-**Skedarët Dalës**:
+**Files Dalës**:
 - `data/processed/household_power_consumption_with_features.csv`
 - `reports/analysis/features_report.txt`
 
@@ -214,7 +214,7 @@ Ky seksion dokumenton se si kanë ndryshuar kolonat e datasetit përmes çdo hap
 
 **Ndryshimet në Kolona**: Krijon pamje të agreguara të veçanta (dataseti origjinal i pandryshuar)
 
-**Skedarët Dalës**:
+**Files Dalës**:
 - `data/aggregated/aggregation_*.csv` (7 skedarë)
 - `reports/analysis/aggregation_report.txt`
 
@@ -244,7 +244,7 @@ Ky seksion dokumenton se si kanë ndryshuar kolonat e datasetit përmes çdo hap
    - `Season_Encoded` (int) - 0=Winter, 1=Spring, 2=Summer, 3=Autumn
    - `TimeOfDay_Encoded` (int) - 0=Night, 1=Morning, 2=Afternoon, 3=Evening
 
-**Skedarët Dalës**:
+**Files Dalës**:
 - `data/processed/household_power_consumption_transformed.csv`
 - `reports/analysis/transformation_report.txt`
 
@@ -282,7 +282,7 @@ Ky seksion dokumenton se si kanë ndryshuar kolonat e datasetit përmes çdo hap
 - **Calculated**: Energy_per_minute
 - **Statistical**: Power_1h_avg, Power_24h_avg, Power_prev_1h, Power_change_1h
 
-**Skedarët Dalës**:
+**Files Dalës**:
 - `data/processed/household_power_consumption_final.csv`
 - `outputs/correlation_matrix.csv`
 - `reports/analysis/feature_selection_report.txt`
@@ -312,7 +312,7 @@ Ky seksion dokumenton se si kanë ndryshuar kolonat e datasetit përmes çdo hap
 
 ---
 
-### Hapi 3: Detektimi i Outliers me Z-Score
+### Hapi 9: Detektimi i Outliers me Z-Score
 **Skripta**: `src/analysis/outlier_zscore.py`
 
 **Të Dhënat Hyrëse**: 
@@ -333,7 +333,7 @@ Ky seksion dokumenton se si kanë ndryshuar kolonat e datasetit përmes çdo hap
 
 ---
 
-### Hapi 4: Detektimi i Outliers me Isolation Forest
+### Hapi 10: Detektimi i Outliers me Isolation Forest
 **Skripta**: `src/analysis/outlier_isolation_forest.py`
 
 **Të Dhënat Hyrëse**: 
@@ -354,7 +354,7 @@ Ky seksion dokumenton se si kanë ndryshuar kolonat e datasetit përmes çdo hap
 
 ---
 
-### Hapi 5: LOF (Local Outlier Factor)
+### Hapi 11: LOF (Local Outlier Factor)
 **Skripta**: `src/analysis/outlier_lof.py`
 
 **Të Dhënat Hyrëse**: 
@@ -375,7 +375,7 @@ Ky seksion dokumenton se si kanë ndryshuar kolonat e datasetit përmes çdo hap
 
 ---
 
-### Hapi 6: Krahasimi i Metodave & Konsensusi
+### Hapi 12: Krahasimi i Metodave & Konsensusi
 **Skripta**: `src/analysis/outlier_comparison.py`
 
 **Të Dhënat Hyrëse**: 
@@ -396,7 +396,7 @@ Ky seksion dokumenton se si kanë ndryshuar kolonat e datasetit përmes çdo hap
 
 ---
 
-### Hapi 7: Analiza e Avancuar Statistikore
+### Hapi 13: Analiza e Avancuar Statistikore
 **Skripta**: `src/analysis/enhanced_statistics.py`
 
 **Hyrja**: 
@@ -415,7 +415,7 @@ Ky seksion dokumenton se si kanë ndryshuar kolonat e datasetit përmes çdo hap
 
 ---
 
-### Hapi 8: Analiza e Shpërndarjes & Testet e Normalitetit
+### Hapi 14: Analiza e Shpërndarjes & Testet e Normalitetit
 **Skripta**: `src/analysis/distribution_analysis.py`
 
 **Hyrja**: 
@@ -434,7 +434,7 @@ Ky seksion dokumenton se si kanë ndryshuar kolonat e datasetit përmes çdo hap
 
 ---
 
-### Hapi 9: Analiza e Korrelacionit
+### Hapi 15: Analiza e Korrelacionit
 **Skripta**: `src/analysis/correlation_analysis.py`
 
 **Hyrja**: 
@@ -453,7 +453,7 @@ Ky seksion dokumenton se si kanë ndryshuar kolonat e datasetit përmes çdo hap
 
 ---
 
-### Hapi 10: Analiza e Komponentëve Kryesorë (PCA)
+### Hapi 16: Analiza e Komponentëve Kryesorë (PCA)
 **Skripta**: `src/analysis/pca_analysis.py`
 
 **Hyrja**: 
@@ -473,11 +473,6 @@ Ky seksion dokumenton se si kanë ndryshuar kolonat e datasetit përmes çdo hap
 <img src="../outputs/phase2/pca_scatter.png" width="600" alt="PCA Scatter Plot 2D">
 
 ---
-
-### Dorëzimet Kryesore të Fazës 2
-- **Raporti Përmbledhës**: `reports/phase2/PHASE2_SUMMARY_REPORT.txt`
-- **Udhëzuesi i Mbrojtjes**: `docs/PHASE2_DEFENSE_GUIDE.md`
-- **Skedarët Dalës**: `outputs/phase2/` (30+ skedarë përfshirë CSV dhe PNG)
 
 ---
 
@@ -528,7 +523,7 @@ Për të ekzekutuar tubacionin e plotë të përpunimit të të dhënave:
    python pca_analysis.py
    ```
 
-## Struktura e Skedarëve
+## Struktura e Folderave/files
 
 ```
 │
