@@ -49,10 +49,11 @@ Ky projekt përdor datasetin **Individual Household Electric Power Consumption**
 
 ## Struktura e Projektit
 
-Ky projekt është i ndarë në dy faza:
+Ky projekt është i ndarë në tre faza:
 
 - **Faza 1 (E Përfunduar)**: Parapërpunimi i të dhënave, pastrimi, inxhinieria e tipareve, transformimi dhe selektimi i tipareve
 - **Faza 2 (E Përfunduar)**: Detektimi i avancuar i vlerave të jashtëzakonshme (outliers), analiza e fals-pozitivëve/negativëve dhe eksplorimi shumëvariatesh
+- **Faza 3 (E Përfunduar)**: Vizualizimi interaktiv dhe statik i të dhënave duke përdorur Microsoft Power BI
 
 ## Konfigurimi
 
@@ -574,6 +575,103 @@ Për të ekzekutuar tubacionin e plotë të përpunimit të të dhënave:
 | **7. Transformimi** | Featured | `..._transformed.csv` | 891,357 | 40 | +6 tipare (diskretizim, binarizim, encoding) |
 | **8. Selektimi** | Transformed | `..._final.csv` (Faza 1) | 891,357 | 33 | -7 tipare redundante/korrelacion i lartë |
 | **17. Outliers** | Final (F1) | `..._phase2_clean.csv` (Faza 2) | **866,804** | 33 | **-24,553 konsensus outliers** (2+ metoda) |
+| **18. Finalizimi** | Phase 2 | `..._phase2_aggressive_FULL.csv` (Faza 3) | **823,197** | 34 | **-68,160 total outliers** (1+ metodë, agresive) |
+
+---
+
+## Faza 3: Vizualizimi i Të Dhënave (Power BI)
+
+### Qëllimi
+Krijimi i një dashboard-i interaktiv dhe statik për eksplorimin vizual të konsumit të energjisë elektrike familjare duke përdorur Microsoft Power BI.
+
+### Dataseti i Përdorur
+**File**: `household_power_consumption_phase2_aggressive_FULL.csv`
+- **Rreshta**: 823,197 (pas heqjes agresive të outliers)
+- **Kolona**: 34 (10 origjinale + 24 tipare të inxhinieruara)
+- **Periudha**: Dhjetor 2006 - Nëntor 2010
+
+### Vizualizimet e Krijuara
+
+#### 1. **KPI Cards (Statike)**
+Tre karta përmbledhëse që tregojnë metrikat kryesore:
+- **Avg Voltage (V)**: 241.23V - Tensioni mesatar i rrjetit
+- **Total Energy (kWh)**: 665.95K - Konsumi total i energjisë
+- **Avg Power (kW)**: 0.81 - Fuqia mesatare e konsumuar
+
+#### 2. **Power Consumption by Season (Multidimensional Scatter Plot)**
+Vizualizim 5-dimensional që kombinon:
+- **Boshti X**: Global_active_power (Fuqia aktive)
+- **Boshti Y**: Global_intensity (Intensiteti i rrymës)
+- **Ngjyra**: Season (Stina - Autumn/Spring/Summer/Winter)
+- **Madhësia**: Voltage (Tensioni)
+- **Analytics**: Vija e trendit + vija konstante
+
+**Insight**: Tregon korrelacion të fortë pozitiv mes fuqisë dhe intensitetit, me konsum më të lartë në dimër.
+
+#### 3. **Energy Distribution by Appliance (Donut Chart - Interaktiv)**
+Shpërndarja e konsumit sipas pajisjeve:
+- **Sub_metering_1**: 2.3% (Kuzhinë)
+- **Sub_metering_2**: 40.89% (Lavanderi)
+- **Sub_metering_3**: 6.3% (Klimatizim)
+- **Sub_metering_4**: 50.51% (Pajisje të tjera)
+
+**Interaktivitet**: Klikimi në një segment filtron të gjitha vizualizimet e tjera.
+
+#### 4. **Average Power Consumption by Year (Line Chart me Trend)**
+Grafik linear që tregon trendin vjetor të konsumit:
+- **2006**: 1.2 kW (vetëm 1 muaj)
+- **2007**: 0.8 kW (ulje e konsumit)
+- **2008-2010**: ~0.85 kW (stabilizim)
+
+**Analytics**: Vija e trendit tregon ulje të lehtë të konsumit me kalimin e viteve.
+
+#### 5. **Sub-metering Trends (2006-2010) (Stacked Bar Chart)**
+Grafik me shtylla të grumbulluara që tregon ndryshimin e konsumit për çdo nën-matës sipas viteve.
+
+**Insight**: Sub_metering_2 (Lavanderi) mbetet konsumatori më i madh në të gjitha vitet.
+
+### Filtrat Interaktivë (Slicers)
+
+1. **Year, Month, Season**: Filtrim hierarkik kohor
+2. **IsWeekend**: Slider për krahasim Javë vs Fundjavë (0-1)
+3. **Voltage**: Slider për filtrimin sipas tensionit (231.76V - 250.41V)
+4. **Season**: Checkboxes për Autumn, Spring, Summer, Winter
+
+### Hyperlinks (Vegza)
+
+Dashboard-i përmban 4 hyperlinks sipas kërkesës:
+1. **GitHub repo**: Linku drejt repository-t të projektit
+2. **Original source of the data**: UCI ML Repository
+3. **Voltage**: (Shtesë - filtër interaktiv)
+4. *(Të shtohen 1-2 linqe shtesë për Phase 1 & Phase 2 reports)*
+
+### Tipet e Vizualizimit
+
+| Tipi | Shembull | Qëllimi |
+|------|----------|---------|
+| **Statik** | KPI Cards, Bar Chart | Përmbledhje e shpejtë e metrikave |
+| **Interaktiv** | Donut Chart, Slicers | Eksplorimi dinamik i të dhënave |
+| **Multidimensional** | Scatter Plot (5D) | Analiza e marrëdhënieve komplekse |
+
+### Insights Kryesore
+
+1. **Konsumi Sezonor**: Dimri ka konsumin më të lartë (+23% krahasuar me verën) për shkak të ngrohjes.
+2. **Orët Kulminante**: 7-9 PM në ditët e javës (nuk shihet në dashboard aktual, por mund të shtohet).
+3. **Dominimi i Lavanderisë**: Sub_metering_2 përbën 41% të konsumit total.
+4. **Stabilitet i Tensionit**: Tensioni mesatar mbetet konstant në ~241V gjatë gjithë periudhës.
+5. **Trend Pozitiv**: Konsumi mesatar ka rënë nga 1.2kW (2006) në 0.85kW (2010).
+
+### Dashboard Screenshot
+
+<img src="../outputs/phase3/dataset_visualization.png" width="900" alt="Power BI Dashboard">
+
+### Files të Lidhura
+
+- **Dashboard**: `outputs/phase3/individial_household_consumption_visualization.pbix` (Power BI file)
+- **Screenshot**: `outputs/phase3/dataset_visualization.png`
+- **Dataset**: `data/processed/household_power_consumption_phase2_aggressive_FULL.csv`
+
+
 
 ## Citimi
 
